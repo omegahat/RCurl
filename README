@@ -1,0 +1,11 @@
+This package is a (currently) simple interface to the 
+libcurl functionality.  This is an extensive and well
+tested library that takes care of so many details that
+we would have to mimic (probably incompletely and poorly)
+if we were to write this in the R language directly.
+
+You will need to have libcurl installed on your machine.
+You can obtain the source and binaries for numerous operating
+systems from 
+              http://curl.haxx.se
+

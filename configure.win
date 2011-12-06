@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if test -z "${LIB_CURL}" ; then
+  echo "Please set LIB_CURL"
+fi
+
+mkdir $R_PACKAGE_DIR/libs
+cp $LIB_CURL/bin/*.dll $R_PACKAGE_DIR/libs

@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Todo for RCurl</title>
+</head>
+
+<body>
+<h1></h1>
+
+<dl>
+
+<dt>
+potential problem with httpheader in RCurl
+when only one element in the vector. name seems to disappear.
+<code>
+curlPerform(url = "http://www.chemspider.com/MassSpecAPI.asmx", post = TRUE, postfields = body, verbose = TRUE, .opts = list(httpheader = c(SOAPAction = '"http://www.chemspider.com/GetExtendedCompoundInfo"', Accept = "text/xml")))
+</code>
+<code>
+curlPerform(url = "http://www.chemspider.com/MassSpecAPI.asmx", post = TRUE, postfields = body, verbose = TRUE, .opts = list(httpheader = c(SOAPAction = '"http://www.chemspider.com/GetExtendedCompoundInfo"')))
+</code>
+
+ <dd>
+
+
+
+  <dt>
+  <li>
+      In HTTP 300 replies, where we follow the location, we can end up
+    with the wrong Content-Type. Does libcurl give us the new header?
+  <dd>  See tests/airports.R in RHTMLForms/
+  
+  
+  <dt>
+  <li> Rather than looking at Content-Type, we also have to look at
+  Content-Encoding to see if it is gzip or something binary.
+  <dd>
+<pre>
+u = getURLContent('http://www.omegahat.org/SVGAnnotation/shape.svgz', .opts = list(verbose = TRUE))
+</pre>      
+
+ <dt>
+ <li> Avoid repeatedly setting the same curl options in getURLContent(), initializing the curl option, etc.
+ <dd> Put a break point in the C code that sets the options and/or in the central R code.
+
+  <dt>
+  <li> getURLContent() and parsing the response WHEN THE REQUEST IS FTP!!
+  <dd>
+  
+  <dt>
+  <li> FTP upload.
+  <dd>  Done?
+  
+  <dt>
+  <li> CURLOPT_QUOTE and linked list.
+  <dd>
+  
+  <dt>
+  <li> Allow the analysis/reading of the header in the response to
+  adapt
+      the Curl handle to change the reader.
+  <dd> e.g. the compression example in Examples/Example.xml in the Books/XMLTechnologies.
+ 
+  <dt>
+  <li>Use raw() to deal with binary content.</li>
+  <dd>
+
+  <dt>
+  <li> Free the multi curl handle.
+  <dd>
+      
+  <dt>
+      curlDupHandle might be very problematic
+      by not copying its data.
+  <dd>
+      If we don't put this under our memory management,
+      then we won't free those elements.
+      Thinking about this, does it actually happen? I think not. Need
+      more thought.
+      
+      
+  <dt> Bring in the URI support, etc. from httpClient.
+  <dd>
+
+
+  <dt> Passwords with HTTPS don't seem to be working for me at present.
+  <dd> 
+      
+</dl>
+
+
+<h3>Next</h3>
+<dl>
+
+  <dt> Check all the isProtected computations in R are correct.
+  <dd>
+        When call curlPerform() from getURL(), we explicitly pass
+      the curl object, so it is okay.
+
+      <p>
+      We could add the .isProtected argument to indicate whether the
+      caller    wants to guarantee that the allocation is okay. 
+      Add in future releases.
+
+
+  <dt> Support for different settings in the forms.
+  <dd> e.g. files,
+    <br>
+    Need structure for the data.
+      Allow  things like
+      <ul>
+	<li> file so as to get the contents from the file,
+             (although this can be done in R but have to watch for NULL strings in binary files),
+	<li> lists/vectors of these things
+	<li> contenttype.
+	<li> arrays.
+      </ul>
+
+
+  
+  <dt> Look at libwww.
+  <dd>
+ 
+  <dt> Have a default CURL options that is used throughout.
+  <dd>  Put in a default value for .opts
+      which is a call to, say, getDefaultCURLOptions()
+  
+  <dt> Compute the Option constants from the C code just once and store it.
+  <dd>
+
+  
+  <dt> Allow CURLOPT_WRITEDATA/CURLOPT_WRITEFUNCTION to be specified
+       as a connection.
+  <dd> This way we can use R's writing facilities in the C code
+      without having to go to the top-level code.
+      Mmmm. Maybe we should go up to the R level for this
+      using a function.
+
+      
+  <dt> Automate the generation of the enums.
+  <dd> GccTranslationUnit.
+
+      
+     
+  <dt> Recursive calls
+  <dd> e.g. calls from within the callback to gather text
+      to download other files.
+
+      <br>
+
+       Look at the asychronous downloads.
+       And also can do it directly if one nows the base URI
+
+  <dt> Simplify the code for the options.
+  <dd>
+
+  <dt> Add a reader for CURLOPT_READFUNCTION
+  <dd> For uploading files.
+
+  <dt> Could get more sophisticated by having an expception
+       class for CURL with the error code and message.
+  <dd>
+      
+  
+</dl>
+
+<h2>Done</h2>
+<dl>
+
+  <dt> Illustrate how to use an R connection with the
+      write callback for gathering text.
+  <dd>  xmlTreeParse() with a connection that the XML parser can call to get more text.
+<br>
+    Done. See tests/xmlParse.xml
+
+  
+  <dt>
+  <li>C routines as handlers for the functions.</li> 
+  <dd> i.e. for the writefunction, pass a C routine and deal with
+    binary data coming down the pipe.
+      <br>
+     Done. Could be done more elegantly.
+  
+  <dt> Tidy the package
+  <dd> Make this a namespace and register the routines.
+
+  
+  <dt> Fill in the conversions for the opts.
+  <dd> Do the coercion to the right type.
+       Handle protected and not protected cases.
+
+      <p>
+       We can tell what the target data type is from
+       the number encoded in the option id.
+       These jump into different ranges for the different  types.
+       So we can test for type, or coerce, in R.
+      <i>Unfortunately, only up to OBJECTPOINT</i>      
+
+  
+  <dt> Check releasing the form HTTPPOST list.
+  <dd> Should be ok.
+       Make certain we release the memory for the slist elements.      
+       For HTTPPOST, this is protected because we don't leave
+       it in the CURL because we reset the HTTPPOST field.
+
+  
+  <dt> setCurlHeaders via regular options
+  <dd>Check releasing the form HTTPHEADER list.
+ 
+      
+  <dt> Bits for initializing the global state.
+  <dd> CIRL_GLOBAL_SSL, CIRL_GLOBAL_WIN32, NOTHING, ALL
+
+      <p>
+        Check if R initializes this on Windows and accordingly turn it
+      off here.
+  
+
+  <dt> Get the names of the curl error codes to put on the status.
+  <dd> Already there. See asCurlErrorCode
+      
+  
+  <dt> Memory management!!!
+  <dd>
+      Release the curl object if possible by knowing whether
+      this is a local use of the data or whether it will persist.
+
+      <p>
+      For persistence, we will have to collect
+      data structures and know how to release them.
+      We can collect them as linked lists
+      and associate them with the CURL handle via a table
+      or simple linked list.
+      <p>
+      There doesn't seem to be a hook to tag something into the
+      CURL handle.
+
+  
+
+  <dt> Callback for the password for an HTTPS connection.
+  <dd> Doesn't appear to be used in libcurl anymore.
+       Do we use the ssl context callback?
+      <br>
+      PASSWDFUNCTION is deprecated.
+      So it appears that the caller has to set it in the USERPWD.
+
+  
+  <dt> Can read header separately with a headerfunction option in the
+      same
+      way as writefunction.
+  <dd>
+  
+  <dt> curl_easy_getinfo()
+  <dd> Done  
+      
+  <dt> Passwords. Find out why they aren't behaving - in https.
+  <dd>
+      <code>getURL("https://secureweb.ucdavis.edu:443")</code>
+      <code>getURL("https://my.ucdavis.edu")</code>      
+
+      netrc file.
+
+      <p/>
+      Without https, they are working,
+      either via CURLOPT_USERPWD
+      or the .netrc file.
+
+  
+  <dt> Keep alives for connection.
+  <dd> Should be done by default in libcurl?
+      If not, just add it to the httpheader option.
+  
+  <dt> Check the error handling from curl.
+  <dd> R_CURL_CHECK_ERROR.
+
+      
+
+  <dt> Allow access to setting header information.
+  <dd>
+      Done via the options now.  httpheaders
+      This combines the names and values if
+      there are names and all the entries don't have
+      a : in them.
+      <p>
+
+      See setCurlHeaders().
+      Note that we can include this directly in the
+      converter for an R object to a CURL option.
+      We just need to tidy up after this.
+
+      <p>
+
+      curl_slist_append().
+      curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, headers);
+
+  
+
+  <dt> HTTPS
+  <dd>  "https://sourceforge.net/" works.
+<p>    Not anymore.
+
+  
+  <dt> Version information
+  <dd>  Handle the features bitfield<br>
+        Automate this (unfortunately #defines)
+
+  
+  <dt> Redirects and relocations for URIs.
+  <dd>  Set the FOLLOWLOCATION by default.
+
+  
+  <dt> Finalizer on the curls.
+  <dd>
+
+  <dt> Make the curl perform function take options.
+  <dd> Done.
+
+
+
+  <dt> Make the converters know whether the objects are protected are not.
+  <dd>
+      
+  <dt> Form handling
+  <dd>
+      Test on winnie:cgi-bin/form1.pl
+      and
+
+<pre>
+ postForm("http://www.speakeasy.org/~cgires/perl_form.cgi",
+            "some_text" = "Duncan",
+            "choice" = "Ho",
+            "radbut" = "eep",
+#            "box" = "box1"
+            "box" = "box1, box2"
+          # and try c("box1", "box2")
+          )
+</pre>
+            
+
+</dl>
+
+
+
+<hr>
+<address><a href="http://cm.bell-labs.com/stat/duncan">Duncan Temple Lang</a>
+<a href=mailto:duncan@research.bell-labs.com>&lt;duncan@research.bell-labs.com&gt;</a></address>
+<!-- hhmts start -->
+Last modified: Fri Aug  5 12:40:50 PDT 2011
+<!-- hhmts end -->
+</body> </html>

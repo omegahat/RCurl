@@ -1,0 +1,68 @@
+
+export(getURL, getURI, postForm, getForm, getURLContent)
+export(curlGlobalInit,curlVersion)
+export(curlOptions)
+export(getCurlInfoConstants, getCurlOptionsConstants, listCurlOptions)
+export(curlSetOpt, curlPerform, getCurlInfo)
+export(getCurlHandle, dupCurlHandle)
+export(CurlFeatureBits, CurlGlobalBits, CurlNetrc)
+export(curlOptions)
+export(basicTextGatherer, debugGatherer, basicHeaderGatherer)
+export(curlEscape, curlUnescape, curlPercentEncode)
+export(getBitIndicators, setBitIndicators)
+export(parseHTTPHeader)
+
+export(chunkToLineReader)
+
+S3method("[<-",  CURLOptions)
+S3method("[[<-",  CURLOptions)
+
+exportMethods("pop", "push")
+export(curlMultiPerform, getCurlMultiHandle, getURLAsynchronous, getURIAsynchronous,
+       multiTextGatherer)
+
+export(complete)
+
+exportClasses(MultiCURLHandle, CURLHandle)
+
+export(merge.list)
+
+export(binaryBuffer)
+exportMethods("coerce")
+
+export(base64, base64Encode, base64Decode)
+
+useDynLib(RCurl, R_curl_BinaryData_new, R_curl_BinaryData_to_raw, R_base64_decode, R_base64_encode)
+
+export(fileUpload)
+
+
+export(findHTTPHeaderEncoding)
+export(getBinaryURL)
+
+export(reset)
+exportMethods('reset')
+
+export(ftpUpload)
+
+
+export(dynCurlReader)
+
+export(getCurlOptionTypes)
+exportPattern("HTTP_VERSION_.*")
+exportPattern("SSLVERSION_.*")
+
+exportClass("CFILE")
+export(CFILE)
+
+
+export(scp)
+
+export(guessMIMEType)
+
+ # do we want a httpPOST.
+export(httpPUT, httpDELETE, httpGET, httpPOST)
+
+export(getFormParams)
+
+

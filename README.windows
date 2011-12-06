@@ -1,0 +1,73 @@
+Updated, 19th Sept. 2006
+
+Fetch the binary version of libcurl from 
+   http://curl.haxx.se/download.html#Win32
+
+(There is no development version there, i.e. -devel)
+
+Using MinGW, version 3.4.2, we can link directly
+Unzip this into a directory and then
+
+
+
+
+
+
+
+Download the curl development distribution for mingw32 with ssl.
+That is 
+  curl-7.12.0-win32-ssl-devel-mingw32.zip 
+via
+  http://curl.haxx.se/download.html#Win32
+
+If SSL is not needed, obviously retrieve the version
+without SSL.
+
+To make the Curl header and library files available
+for the build, it is easiest (?) to copy the
+relevant files from the curl distribution into
+a centralized location that is shared across
+the different development tools that are used
+when compiling R packages. This directory
+behaves like /usr/local/ in Unix and has
+a include/, lib/ and bin/ directory.
+We put the header files in the include/,
+the libraries in lib/ and the DLLs for run-time
+in bin/ as necessary. 
+
+For curl, we copy the contents of the include/ directory in the curl
+distribution to $HOME/include to create a directory
+$HOME/include/curl/ with the header files.  Similarly, we copy the *.a
+files to the $HOME/lib/ directory. These .a files are in the top-level
+directory of the curl distribution.
+
+
+
+SSL
+---
+
+curl does not come with the SSL libraries it needs (for good
+reasons). Instead, you need to fetch them. For me, I downloaded and
+built from the source distribution.  I am using openssl-0.9.7e. The
+files are available at
+
+   www.openssl.org
+
+Unzip and build the openssl libraries by running the command
+
+ ./Configure mingw
+ make
+
+I configured the build with
+  ./Configure mingw no-asm
+to remove the assembler compilation which caused problems with
+the MinGW version I was using (as 2.15.91).
+
+Then, manually copy libssl.a and libcrypto.a to
+the $HOME/lib/ directory where we tell the compilation
+to find these libraries.  See RCurl/src/Makevars.win
+and the LOCAL variable.
+
+
+
+

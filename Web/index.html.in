@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<link rel="stylesheet" href="http://www.omegahat.org/OmegaTech.css">
+<title>RCurl</title>
+</head>
+
+<body>
+<h1>The RCurl Package</h1>
+<p align=right><a href="@TAR_FILE@">@TAR_FILE@</a> (@DATE@)</p>
+<p align=right><a href="philosophy.html">Manual</a></p>
+
+The RCurl package is an R-interface to the <a
+href="http://curl.haxx.se">libcurl</a> library that provides HTTP facilities. This
+allows us to download files from Web servers, post forms, use HTTPS
+(the secure HTTP), use persistent connections, upload files, use
+binary content, handle redirects, password authentication,  etc.
+
+<p>
+ The primary top-level entry points are
+<ul>
+  <li> <a href="installed/RCurl/html/getURL.html">getURL()</a>
+  <li> <a href="installed/RCurl/html/getURL.html">getURLContent()</a>      
+  <li> <a href="installed/RCurl/html/postForm.html">getForm()</a>
+  <li> <a href="installed/RCurl/html/postForm.html">postForm()</a>
+</ul>
+However, access to the C-level routines is also available
+via the R code, and one can specify options to all of the
+libcurl operations to control how they are performed.
+Documentation about the options and commands
+can be found at the <a href="http://curl.haxx.se">libcurl web site</a>
+
+
+<p> R functions can be specified to collect text from both the
+response and its headers. This can be used to customize the processing
+of the requests and feed the results to higher-level processing
+(e.g. HTML parsing via the htmlTreeParse function in the <a
+href="http://www.omegahat.org/RSXML">XML package</a>).
+
+
+<p> This package will be used to implement the low-level communication
+in the <a href="http://www.omegahat.org/SSOAP">SSOAP</a> package
+and other high-level packages that utilize HTTP to exchange
+requests and data.
+
+<h2>Documentation</h2>
+<dl>
+  <dt>
+  <li> <a href="RCurlJSS.pdf">Paper</a> 
+       outlining the package with some advanced examples.
+  <dd>
+
+  <dt>
+  <li> <a href="philosophy.html">Guide</a>
+  <dd>
+  <dt>
+  <li> <a href="Changes.html">Changes across releases</a>
+  <dd>
+
+  <dt>
+  <li> Examples of using asynchronous, multiple concurrent requests.
+  <dd>
+    <ul>
+      <li><a href="concurrent.html" >Concurrent downloads</a></li>
+      <li><a href="nestedHTML.html" >Nested HTML requests</a></li>
+      <li><a href="xmlParse.html" >XML parsing with nested requests</a></li>      
+   </ul>
+
+<dt>
+<li> <a href="FAQ.html">FAQ</a>
+<dd>
+
+</dl>
+
+
+<h2>Other Approaches</h2>
+
+<dl>
+  <dt> <a href="http://cran.r-project.org/src/contrib/Descriptions/httpRequest.html">httpRequest</a>
+  <dd> The httpRequest is a package on CRAN that implements a small
+      part of HTTP directly in R using sockets.
+
+  <dt> httpClient
+  <dd> I have developed the <b>httpClient</b> package using
+      R code and connections that supports additional
+      aspects of R and HTTP, such as cookies, character escaping, and also
+      SSL for HTTPS. I haven't released the code (favoring the
+      approach of building on existing C code) but can make it available if anyone
+      is interested.
+    
+</dl>
+
+While having code in R makes it easier to understand, explore and
+modify, it is probably better to use existing specialized libraries
+like libcurl rather than doing this ourself.  We gain speed and a
+large development community that cares about getting things right and
+testing them.
+We will explore the use of <a href="http://www.w3.org/Library">libwww</a>
+
+<h2>Issues</h2>
+Using the opaque data structures of the libcurl infrastructure
+means that we cannot easily access the file descriptors used
+in the communication. This  makes it somewhat more difficult
+to integrate these streams into  an R even loop
+(e.g. <a href="http://www.omegahat.org/REventLoop">REventLoop</a>).
+We can potentially turn them into regular connections
+(if the internal API is made "public").
+
+
+<h2>License</h2>
+This is distributed under the <a href="http://www.omegahat.org/BSDLicense.html">BSD license</a>
+in the same spirit as libcurl itself.
+
+<hr>
+<address><a href="http://www.stat.ucdavis.edu/~duncan">Duncan Temple Lang</a>
+<a href=mailto:duncan@wald.ucdavis.edu>&lt;duncan@wald.ucdavis.edu&gt;</a></address>
+<!-- hhmts start -->
+Last modified: Mon May 25 11:35:38 PDT 2009
+<!-- hhmts end -->
+
+</body> </html>
