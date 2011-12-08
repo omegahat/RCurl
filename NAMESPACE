@@ -66,3 +66,4 @@ export(httpPUT, httpDELETE, httpGET, httpPOST)
 export(getFormParams)
 
 
+export(url.exists)
