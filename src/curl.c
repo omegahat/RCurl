@@ -5,7 +5,7 @@
 /* Not thread-safe, but okay for now. */
 static char RCurlErrorBuffer[1000] = "<not set>";
 
-#define R_CURL_CHECK_ERROR(status, handle) 	if(status != CURLE_OK) getCurlError(handle, 1);
+#define R_CURL_CHECK_ERROR(status, handle) 	if(status != CURLE_OK) getCurlError(handle, 1, status);
 
 #define MIN(a,b) ((a) < (b) ? (a)  : (b))
 
@@ -32,7 +32,7 @@ void * getCurlPointerForData(SEXP el, CURLoption option, Rboolean isProtected, C
 SEXP makeCURLcodeRObject(CURLcode val);
 CURL *getCURLPointerRObject(SEXP obj);
 SEXP makeCURLPointerRObject(CURL *obj, int addFinalizer);
-char *getCurlError(CURL *h, int throw);
+char *getCurlError(CURL *h, int throw, CURLcode status);
 SEXP RCreateNamesVec(const char * const *vals,  int n);
 
 void addFormElement(SEXP el, SEXP name, struct curl_httppost **post, struct curl_httppost **last, int which);
@@ -52,13 +52,14 @@ SEXP
 R_curl_easy_init(void)
 {
 	CURL *obj;
+	CURLcode status;
 	obj = curl_easy_init();
 	if(obj) {
 /*XX Debugging options */
  	    curl_easy_setopt(obj, CURLOPT_HTTPAUTH, CURLAUTH_ANY); /* or CURLAUTH_BASIC*/
 
-	    if(curl_easy_setopt(obj, CURLOPT_ERRORBUFFER, RCurlErrorBuffer))
-   	       getCurlError(obj, 1);
+	    if(status = curl_easy_setopt(obj, CURLOPT_ERRORBUFFER, RCurlErrorBuffer))
+		getCurlError(obj, 1, status);
 
 	}
 	return(makeCURLPointerRObject(obj, TRUE));
@@ -241,7 +242,7 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 
 		if(status) {
 			PROBLEM "Error setting the option for # %d (status = %d) (enum = %d) (value = %p): %s %s", 
-                                    i+1, status, opt, val, curl_easy_strerror(status), getCurlError(obj, 0)
+			          i+1, status, opt, val, curl_easy_strerror(status), getCurlError(obj, 0, -1)
 			WARN;
 		}
 
@@ -706,12 +707,28 @@ R_curl_getpasswd(SEXP fun, char *prompt, char* buffer, int  buflen  )
 
 
 char *
-getCurlError(CURL *h, int throw)
+getCurlError(CURL *h, int throw, CURLcode status)
 {
+#if 0
    if(throw) {
 	   PROBLEM "%s", RCurlErrorBuffer
 	   ERROR;
    }
+#else
+
+   if(throw) {
+       SEXP e, ptr;
+       PROTECT(e = Rf_allocVector(LANGSXP, 4));
+       SETCAR(e, Rf_install("curlError")); ptr = CDR(e);
+       SETCAR(ptr, ScalarInteger(status));  ptr = CDR(ptr);
+       SETCAR(ptr, ScalarString(mkChar(RCurlErrorBuffer)));  ptr = CDR(ptr);
+       SETCAR(ptr, ScalarLogical(throw));  ptr = CDR(ptr);
+
+       Rf_eval(e, R_GlobalEnv);
+       UNPROTECT(1);
+   }
+
+#endif
    return(RCurlErrorBuffer);
 }
 

@@ -67,3 +67,4 @@ export(getFormParams)
 
 
 export(url.exists)
+export(curlError)
