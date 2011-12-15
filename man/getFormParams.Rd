@@ -28,11 +28,14 @@ Duncan Temple Lang
 }
 
 \examples{
- getFormParams("http://www.omegahat.org/foo/bob.R?xyz=1&abc=verylong")
+if(url.exists("http://www.omegahat.org/foo/bob.R")) {
 
- getFormParams("xyz=1&abc=verylong")
- getFormParams("xyz=1&abc=&on=true")
- getFormParams("xyz=1&abc=")
+  getFormParams("http://www.omegahat.org/foo/bob.R?xyz=1&abc=verylong")
+
+  getFormParams("xyz=1&abc=verylong")
+  getFormParams("xyz=1&abc=&on=true")
+  getFormParams("xyz=1&abc=")
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

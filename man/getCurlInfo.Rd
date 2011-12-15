@@ -49,10 +49,12 @@ getCurlInfoConstants()
   \code{\link{getCurlHandle}}
 }
 \examples{
-  curl = getCurlHandle()
-  getURL("http://www.omegahat.org/RCurl/index.html", curl = curl)
-  getCurlInfo(curl)
-  rm(curl)  # release the curl!
+ if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
+    curl = getCurlHandle()
+    getURL("http://www.omegahat.org/RCurl/index.html", curl = curl)
+    getCurlInfo(curl)
+    rm(curl)  # release the curl!
+ }
 }
 \keyword{IO}
 

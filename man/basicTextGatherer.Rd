@@ -125,6 +125,7 @@ debugGatherer()
   \code{\link{dynCurlReader}}  
 }
 \examples{
+if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
   txt = getURL("http://www.omegahat.org/RCurl/index.html", write = basicTextGatherer())
 
   h = basicTextGatherer()
@@ -159,6 +160,8 @@ debugGatherer()
   txt = getURIAsynchronous(uris,  write = g)
   names(txt)
   nchar(txt)
+}
+
 
 \dontrun{
 Sys.setlocale(,"en_US.latin1")

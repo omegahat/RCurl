@@ -51,6 +51,7 @@ binaryBuffer(initialSize = 5000)
  \code{R_curl_write_binary_data}
 }
 \examples{
+if(url.exists("http://www.omegahat.org/RCurl/xmlParse.html.gz")) {
   buf = binaryBuffer()
 
      # Now fetch the binary file.
@@ -63,7 +64,7 @@ binaryBuffer(initialSize = 5000)
 
  if(require(Rcompression)) 
    gunzip(b)
-
+ }
 }
 \keyword{IO}
 \keyword{programming}

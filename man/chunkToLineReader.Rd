@@ -68,7 +68,8 @@ function()
 
 s = summer()
 
-getURL("http://www.omegahat.org/RCurl/matrix.data", write = chunkToLineReader(s$read)$read)
+if(url.exists("http://www.omegahat.org/RCurl/matrix.data"))
+   getURL("http://www.omegahat.org/RCurl/matrix.data", write = chunkToLineReader(s$read)$read)
 }
 \keyword{IO}
 \concept{Web}

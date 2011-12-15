@@ -93,6 +93,7 @@ getForm(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle(),
 }
 \examples{
 
+if(url.exists("http://www.google.com")) {
    # Two ways to submit a query to google. Searching for RCurl
   getURL("http://www.google.com/search?hl=en&lr=&ie=ISO-8859-1&q=RCurl&btnG=Search")
 
@@ -101,9 +102,11 @@ getForm(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle(),
 
    # And here if we already have the parameters as a list/vector.
   getForm("http://www.google.com/search", .params = c(hl="en", lr="", ie="ISO-8859-1",  q="RCurl", btnG="Search"))
+}
 
 
    # Now looking at POST method for forms.
+if(url.exists("http://wwwx.cs.unc.edu/~jbs/aw-wwwp/docs/resources/perl/perl-cgi/programs/cgi_stdin.cgi")) 
  postForm("http://wwwx.cs.unc.edu/~jbs/aw-wwwp/docs/resources/perl/perl-cgi/programs/cgi_stdin.cgi",
            name = "Bob", "checkedbox" = "spinich",
            submitButton = "Now!",
@@ -113,6 +116,7 @@ getForm(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle(),
 
 
   # Genetic database via the Web.
+if(url.exists('http://www.wormbase.org/db/searches/advanced/dumper')) {
  x = postForm('http://www.wormbase.org/db/searches/advanced/dumper',
          species="briggsae",
          list="",
@@ -140,7 +144,7 @@ getForm(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle(),
          relative = "Chromsome",
          DNA ="flanking sequences only",
          .cgifields =c("feature", "orientation", "DNA", "dump", "relative"))
-
+}
 	  
 }
 \keyword{IO}

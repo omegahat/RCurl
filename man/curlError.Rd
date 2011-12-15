@@ -46,9 +46,9 @@ Duncan Temple Lang
 \examples{
   # This illustrates generating and catching an error.
   # We intentionally give a mis-spelled URL.
- tryCatch(url.exists("ftp.wcc.nrcs.usda.govx"),
+ tryCatch(curlPerform(url = "ftp.wcc.nrcs.usda.govx"),
           COULDNT_RESOLVE_HOST = function(x) cat("resolve problem\n"),
-           error = function(x) cat(class(x), "got it\n"))
+          error = function(x) cat(class(x), "got it\n"))
 }
 \keyword{programming} 
 \keyword{IO}

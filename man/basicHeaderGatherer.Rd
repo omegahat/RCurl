@@ -51,11 +51,13 @@ parseHTTPHeader(lines, multi = TRUE)
   \code{\link{curlSetOpt}}  
 }
 \examples{
-  h = basicHeaderGatherer()
-  getURI("http://www.omegahat.org/RCurl/index.html",
-           headerfunction = h$update)
-  names(h$value())
-  h$value()
+  if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
+     h = basicHeaderGatherer()
+     getURI("http://www.omegahat.org/RCurl/index.html",
+              headerfunction = h$update)
+     names(h$value())
+     h$value()
+  }
 }
 \keyword{IO}
 \concept{network client}

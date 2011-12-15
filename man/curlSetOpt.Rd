@@ -64,13 +64,16 @@ curlSetOpt(..., .opts = list(), curl = getCurlHandle(),
   \code{\link{dupCurlHandle}}  
 }
 \examples{
-curl = getCurlHandle()
-  # Note the header that extends across two lines with the second line
-  # prefixed with white space.
-curlSetOpt( .opts = list(httpheader = c(Date = "Wed, 1/2/2000 10:01:01",
-                         foo="abc\n    extra line"), verbose = TRUE),
-             curl = curl) 
-ans = getURL("http://www.omegahat.org", curl = curl)
+if(url.exists("http://www.omegahat.org")) {
+
+  curl = getCurlHandle()
+     # Note the header that extends across two lines with the second line
+     # prefixed with white space.
+   curlSetOpt( .opts = list(httpheader = c(Date = "Wed, 1/2/2000 10:01:01",
+                            foo="abc\n    extra line"), verbose = TRUE),
+               curl = curl)
+   ans = getURL("http://www.omegahat.org", curl = curl)
+}
 }
 \keyword{IO}
 

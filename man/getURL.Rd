@@ -120,16 +120,21 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 }
 \examples{
 
+  omegahatExists = url.exists("http://www.omegahat.org")
+
    # Regular HTTP
-  txt = getURL("http://www.omegahat.org/RCurl/")
-   # Then we could parse the result.
-  if(require(XML))
-     htmlTreeParse(txt, asText = TRUE)
+  if(omegahatExists) {
+     txt = getURL("http://www.omegahat.org/RCurl/")
+        # Then we could parse the result.
+     if(require(XML))
+         htmlTreeParse(txt, asText = TRUE)
+  }
 
 
         # HTTPS. First check to see that we have support compiled into
         # libcurl for ssl.
-  if("ssl" \%in\% names(curlVersion()$features)) {
+  if("ssl" \%in\% names(curlVersion()$features)
+         && url.exists("https://sourceforge.net/")) {
      txt = tryCatch(getURL("https://sourceforge.net/"),
                     error = function(e) {
                                   getURL("https://sourceforge.net/",
@@ -140,17 +145,20 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 
 
      # Create a CURL handle that we will reuse.
-  curl = getCurlHandle()
-  pages = list()
-  for(u in c("http://www.omegahat.org/RCurl/index.html",
-             "http://www.omegahat.org/RGtk/index.html")) {
-     pages[[u]] = getURL(u, curl = curl)
+  if(omegahatExists) {
+     curl = getCurlHandle()
+     pages = list()
+     for(u in c("http://www.omegahat.org/RCurl/index.html",
+                "http://www.omegahat.org/RGtk/index.html")) {
+         pages[[u]] = getURL(u, curl = curl)
+     }
   }
 
 
     # Set additional fields in the header of the HTTP request.
     # verbose option allows us to see that they were included.
-  getURL("http://www.omegahat.org", httpheader=c(Accept = "text/html", MyField="Duncan"), verbose = TRUE)
+  if(omegahatExists)
+     getURL("http://www.omegahat.org", httpheader=c(Accept = "text/html", MyField="Duncan"), verbose = TRUE)
 
 
 
@@ -158,24 +166,28 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
     # a separate "stream". Then we can break it into name-value
     # pairs. (The first line is the HTTP/1.1 200 Ok or 301 Moved Permanently
     # status line)
-  h = basicTextGatherer()
-  txt = getURL("http://www.omegahat.org/RCurl/index.html", header= TRUE, headerfunction = h$update, 
+  if(omegahatExists) {
+     h = basicTextGatherer()
+     txt = getURL("http://www.omegahat.org/RCurl/index.html", header= TRUE, headerfunction = h$update, 
                    httpheader = c(Accept="text/html", Test=1), verbose = TRUE) 
-print(paste(h$value(NULL)[-1], collapse=""))
-  read.dcf(textConnection(paste(h$value(NULL)[-1], collapse="")))
+     print(paste(h$value(NULL)[-1], collapse=""))
+     read.dcf(textConnection(paste(h$value(NULL)[-1], collapse="")))
+  }
 
 
 
    # Test the passwords.
-  x = getURL("http://www.omegahat.org/RCurl/testPassword/index.html",  userpwd = "bob:duncantl")
+  if(omegahatExists) {
+     x = getURL("http://www.omegahat.org/RCurl/testPassword/index.html",  userpwd = "bob:duncantl")
 
-   # Catch an error because no authorization
-   # We catch the generic HTTPError, but we could catch the more specific "Unauthorized" error
-   # type.
-  x = tryCatch(getURLContent("http://www.omegahat.org/RCurl/testPassword/index.html"),
-               HTTPError = function(e) {
-                              cat("HTTP error: ", e$message, "\n")
-                           })
+       # Catch an error because no authorization
+       # We catch the generic HTTPError, but we could catch the more specific "Unauthorized" error
+       # type.
+      x = tryCatch(getURLContent("http://www.omegahat.org/RCurl/testPassword/index.html"),
+                    HTTPError = function(e) {
+                                   cat("HTTP error: ", e$message, "\n")
+                                })
+  }
 
 \dontrun{
   #  Needs specific information from the cookie file on a per user basis
@@ -189,80 +201,95 @@ print(paste(h$value(NULL)[-1], collapse=""))
                  followlocation = TRUE)
 }
 
-   d = debugGatherer()
-   x = getURL("http://www.omegahat.org", debugfunction=d$update, verbose = TRUE)
-   d$value()
-
+   if(omegahatExists) {
+       d = debugGatherer()
+       x = getURL("http://www.omegahat.org", debugfunction = d$update, verbose = TRUE)
+       d$value()
+   }
 
     #############################################
     #  Using an option set in R
-   opts = curlOptions(header = TRUE, userpwd = "bob:duncantl", netrc = TRUE)
-   getURL("http://www.omegahat.org/RCurl/testPassword/index.html", verbose = TRUE, .opts = opts)
 
-     # Using options in the CURL handle.
-   h = getCurlHandle(header = TRUE, userpwd = "bob:duncantl", netrc = TRUE)
-   getURL("http://www.omegahat.org/RCurl/testPassword/index.html",  verbose = TRUE, curl = h)
+   if(omegahatExists) {
+      opts = curlOptions(header = TRUE, userpwd = "bob:duncantl", netrc = TRUE)
+      getURL("http://www.omegahat.org/RCurl/testPassword/index.html", verbose = TRUE, .opts = opts)
+
+         # Using options in the CURL handle.
+      h = getCurlHandle(header = TRUE, userpwd = "bob:duncantl", netrc = TRUE)
+      getURL("http://www.omegahat.org/RCurl/testPassword/index.html", verbose = TRUE, curl = h)
+   }
 
 
 
    # Use a C routine as the reader. Currently gives a warning.
-  routine = getNativeSymbolInfo("R_internalWriteTest", PACKAGE = "RCurl")$address
-  getURL("http://www.omegahat.org/RCurl/index.html", writefunction = routine)
+  if(omegahatExists) {
+     routine = getNativeSymbolInfo("R_internalWriteTest", PACKAGE = "RCurl")$address
+     getURL("http://www.omegahat.org/RCurl/index.html", writefunction = routine)
+  }
 
 
 
   # Example
-  uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.xml")
-  txt = getURI(uris)
-  names(txt)
-  nchar(txt)
+  if(omegahatExists) {
+     uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.xml")
+     txt = getURI(uris)
+     names(txt)
+     nchar(txt)
 
-  txt = getURI(uris, async = FALSE)
-  names(txt)
-  nchar(txt)
-
-
-  routine = getNativeSymbolInfo("R_internalWriteTest", PACKAGE = "RCurl")$address
-  txt = getURI(uris, write = routine, async = FALSE)
-  names(txt)
-  nchar(txt)
+     txt = getURI(uris, async = FALSE)
+     names(txt)
+     nchar(txt)
 
 
-  # getURLContent() for text and binary
- x = getURLContent("http://www.omegahat.org/RCurl/index.html")
- class(x)
+     routine = getNativeSymbolInfo("R_internalWriteTest", PACKAGE = "RCurl")$address
+     txt = getURI(uris, write = routine, async = FALSE)
+     names(txt)
+     nchar(txt)
 
- x = getURLContent("http://www.omegahat.org/RCurl/data.gz")
- class(x)
- attr(x, "Content-Type")
 
- x = getURLContent("http://www.omegahat.org/Rcartogram/demo.jpg")
- class(x)
- attr(x, "Content-Type")
+         # getURLContent() for text and binary
+     x = getURLContent("http://www.omegahat.org/RCurl/index.html")
+     class(x)
 
- curl = getCurlHandle()
- dd = getURLContent("http://www.omegahat.org/RJSONIO/RJSONIO.pdf",
-                    curl = curl,
-                    header = dynCurlReader(curl, binary = TRUE,
+     x = getURLContent("http://www.omegahat.org/RCurl/data.gz")
+     class(x)
+     attr(x, "Content-Type")
+
+     x = getURLContent("http://www.omegahat.org/Rcartogram/demo.jpg")
+     class(x)
+     attr(x, "Content-Type")
+
+
+     curl = getCurlHandle()
+     dd = getURLContent("http://www.omegahat.org/RJSONIO/RJSONIO.pdf",
+                        curl = curl,
+                        header = dynCurlReader(curl, binary = TRUE,
                                            value = function(x) {
                                                     print(attributes(x)) 
                                                     x}))
+   }
+
+
 
   # FTP
   # Download the files within a directory.
-url = 'ftp://ftp.wcc.nrcs.usda.gov/data/snow/snow_course/table/history/idaho/'
-filenames = getURL(url, ftp.use.epsv = FALSE, dirlistonly = TRUE)
+if(url.exists('ftp://ftp.wcc.nrcs.usda.gov')) {
 
-  # Deal with newlines as \n or \r\n. (BDR)
-  # Or alternatively, instruct libcurl to change \n's to \r\n's for us with crlf = TRUE
-  # filenames = getURL(url, ftp.use.epsv = FALSE, ftplistonly = TRUE, crlf = TRUE)
-filenames = paste(url, strsplit(filenames, "\r*\n")[[1]], sep = "")
-con = getCurlHandle( ftp.use.epsv = FALSE)
-  # there is a slight possibility that some of the files that are
-  # returned in the directory listing and in filenames will disappear
-  # when we go back to get them. So we use a try() in the call getURL.
-contents = sapply(filenames[1:5], function(x) try(getURL(x, curl = con)))
-names(contents) = filenames[1:length(contents)]
+   url = 'ftp://ftp.wcc.nrcs.usda.gov/data/snow/snow_course/table/history/idaho/'
+   filenames = getURL(url, ftp.use.epsv = FALSE, dirlistonly = TRUE)
+
+      # Deal with newlines as \n or \r\n. (BDR)
+      # Or alternatively, instruct libcurl to change \n's to \r\n's for us with crlf = TRUE
+      # filenames = getURL(url, ftp.use.epsv = FALSE, ftplistonly = TRUE, crlf = TRUE)
+   filenames = paste(url, strsplit(filenames, "\r*\n")[[1]], sep = "")
+   con = getCurlHandle( ftp.use.epsv = FALSE)
+
+      # there is a slight possibility that some of the files that are
+      # returned in the directory listing and in filenames will disappear
+      # when we go back to get them. So we use a try() in the call getURL.
+   contents = sapply(filenames[1:5], function(x) try(getURL(x, curl = con)))
+   names(contents) = filenames[1:length(contents)]
+}
    
 }
 \keyword{IO}

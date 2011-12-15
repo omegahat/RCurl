@@ -39,7 +39,9 @@ Man page for \code{fopen}
 \dontrun{
 filename = system.file("tests", "amazon3.R", package = "RCurl")
 f = CFILE(filename)
-curlPerform(url = "http://s3.amazonaws.com/RRupload/duncan2",
+
+if(url.exists('http://s3.amazonaws.com/'))
+  curlPerform(url = "http://s3.amazonaws.com/RRupload/duncan2",
               upload = TRUE,
               readdata = f@ref,
               infilesize = file.info(filename)[1, "size"])

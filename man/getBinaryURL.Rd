@@ -58,6 +58,8 @@ getBinaryURL(url, ..., .opts = list(), curl = getCurlHandle(), .buf = binaryBuff
 \examples{
   u = "http://www.omegahat.org/RCurl/data.gz"
 
+if(url.exists(u)) {
+
   content = getBinaryURL(u)
 
   if(require(Rcompression)) {
@@ -80,6 +82,8 @@ getBinaryURL(url, ..., .opts = list(), curl = getCurlHandle(), .buf = binaryBuff
     if(require(Rcompression)) 
         x = gunzip(content)
   }
+
+}
 }
 \keyword{IO}
 \keyword{programming}

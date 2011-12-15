@@ -73,14 +73,17 @@ curlMultiPerform(curl, multiple = TRUE)
  \code{\link{curlSetOpt}}
 }
 \examples{
+if(url.exists("http://www.omegahat.org/RCurl")) {
   h = basicTextGatherer()
-  curlPerform(url="http://www.omegahat.org/RCurl", writefunction = h$update)
+  curlPerform(url = "http://www.omegahat.org/RCurl", writefunction = h$update)
    # Now read the text that was cumulated during the query response.
   h$value()
+}
 
 
-  # SOAP request
-body = '<?xml version="1.0" encoding="UTF-8"?>\
+if(url.exists("http://services.soaplite.com/hibye.cgi")) {
+     # SOAP request
+  body = '<?xml version="1.0" encoding="UTF-8"?>\
 <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" \
                    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
                    xmlns:xsd="http://www.w3.org/1999/XMLSchema" \
@@ -93,21 +96,25 @@ body = '<?xml version="1.0" encoding="UTF-8"?>\
 
 
   h$reset()
-curlPerform(url="http://services.soaplite.com/hibye.cgi",
-            httpheader=c(Accept="text/xml", Accept="multipart/*", SOAPAction='"http://www.soaplite.com/Demo#hi"',
-                         'Content-Type' = "text/xml; charset=utf-8"),
-            postfields=body,
-            writefunction = h$update,
-            verbose = TRUE
-            )
+  curlPerform(url = "http://services.soaplite.com/hibye.cgi",
+              httpheader=c(Accept="text/xml", Accept="multipart/*", SOAPAction='"http://www.soaplite.com/Demo#hi"',
+                           'Content-Type' = "text/xml; charset=utf-8"),
+              postfields=body,
+              writefunction = h$update,
+              verbose = TRUE
+             )
 
   body = h$value()
 
+}
+
 
    # Using a C routine as the reader of the body of the response.
+if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
   routine = getNativeSymbolInfo("R_internalWriteTest", PACKAGE = "RCurl")$address
   curlPerform(URL = "http://www.omegahat.org/RCurl/index.html",
               writefunction = routine)
+}
 }
 \keyword{IO}
 

@@ -48,9 +48,5 @@ Duncan Temple Lang
 \examples{
  url.exists("http://www.omegahat.org/RCurl")
  try(url.exists("http://www.omegahat.org/RCurl-xxx"))
-
- tryCatch(url.exists("ftp.wcc.nrcs.usda.govx"),
-          COULDNT_RESOLVE_HOST = function(x) cat("resolve problem\n"),
-           error = function(x) cat(class(x), "got it\n"))
 }
 
