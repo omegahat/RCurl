@@ -1,3 +1,4 @@
+import(methods)
 
 export(getURL, getURI, postForm, getForm, getURLContent)
 export(curlGlobalInit,curlVersion)
