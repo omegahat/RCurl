@@ -56,8 +56,8 @@ Duncan Temple Lang
 \dontrun{
    x = scp("eeyore.ucdavis.edu", "/home/duncan/OmegaWeb/index.html",  "My.SCP.Passphrase", binary = FALSE)
    x = scp("eeyore.ucdavis.edu",  "/home/duncan/OmegaWeb/RCurl/xmlParse.bz2",  "My.SCP.Passphrase")
-   library(Rcompression)
-   o = bunzip2(x)
+   if(require(Rcompression))
+      o = bunzip2(x)
 }
 }
 \keyword{IO}
