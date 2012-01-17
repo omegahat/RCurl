@@ -717,9 +717,12 @@ getCurlError(CURL *h, int throw, CURLcode status)
 #else
 
    if(throw) {
-       SEXP e, ptr;
+       SEXP e, ptr, fun;
+
+       fun = Rf_findVarInFrame(R_FindNamespace(ScalarString(mkChar("RCurl"))), Rf_install("curlError"));
+
        PROTECT(e = Rf_allocVector(LANGSXP, 4));
-       SETCAR(e, Rf_install("curlError")); ptr = CDR(e);
+       SETCAR(e, fun); ptr = CDR(e);
        SETCAR(ptr, ScalarInteger(status));  ptr = CDR(ptr);
        SETCAR(ptr, ScalarString(mkChar(RCurlErrorBuffer)));  ptr = CDR(ptr);
        SETCAR(ptr, ScalarLogical(throw));  ptr = CDR(ptr);
