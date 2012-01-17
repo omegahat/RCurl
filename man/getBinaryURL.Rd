@@ -53,7 +53,8 @@ getBinaryURL(url, ..., .opts = list(), curl = getCurlHandle(), .buf = binaryBuff
 \seealso{
   \code{\link{getURL}}
   \code{\link[base]{raw}}
-  \code{\link[Rcompression]{gunzip}}
+  %\code{\link[Rcompression]{gunzip}}
+  \code{gunzip} in the \code{Rcompression} package.
 }
 \examples{
   u = "http://www.omegahat.org/RCurl/data.gz"
