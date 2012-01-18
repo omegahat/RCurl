@@ -133,7 +133,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 
         # HTTPS. First check to see that we have support compiled into
         # libcurl for ssl.
-  if("ssl" \%in\% names(curlVersion()$features)
+  if(interactive() && ("ssl" \%in\% names(curlVersion()$features))
          && url.exists("https://sourceforge.net/")) {
      txt = tryCatch(getURL("https://sourceforge.net/"),
                     error = function(e) {
@@ -145,7 +145,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 
 
      # Create a CURL handle that we will reuse.
-  if(omegahatExists) {
+  if(interactive() && omegahatExists) {
      curl = getCurlHandle()
      pages = list()
      for(u in c("http://www.omegahat.org/RCurl/index.html",
@@ -158,7 +158,9 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
     # Set additional fields in the header of the HTTP request.
     # verbose option allows us to see that they were included.
   if(omegahatExists)
-     getURL("http://www.omegahat.org", httpheader=c(Accept = "text/html", MyField="Duncan"), verbose = TRUE)
+     getURL("http://www.omegahat.org", httpheader = c(Accept = "text/html", 
+                                                      MyField = "Duncan"), 
+               verbose = TRUE)
 
 
 
@@ -201,7 +203,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
                  followlocation = TRUE)
 }
 
-   if(omegahatExists) {
+   if(interactive() && omegahatExists) {
        d = debugGatherer()
        x = getURL("http://www.omegahat.org", debugfunction = d$update, verbose = TRUE)
        d$value()
@@ -210,7 +212,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
     #############################################
     #  Using an option set in R
 
-   if(omegahatExists) {
+   if(interactive() && omegahatExists) {
       opts = curlOptions(header = TRUE, userpwd = "bob:duncantl", netrc = TRUE)
       getURL("http://www.omegahat.org/RCurl/testPassword/index.html", verbose = TRUE, .opts = opts)
 
@@ -222,7 +224,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 
 
    # Use a C routine as the reader. Currently gives a warning.
-  if(omegahatExists) {
+  if(interactive() && omegahatExists) {
      routine = getNativeSymbolInfo("R_internalWriteTest", PACKAGE = "RCurl")$address
      getURL("http://www.omegahat.org/RCurl/index.html", writefunction = routine)
   }
@@ -230,7 +232,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 
 
   # Example
-  if(omegahatExists) {
+  if(interactive() && omegahatExists) {
      uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.xml")
      txt = getURI(uris)
      names(txt)
@@ -273,7 +275,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 
   # FTP
   # Download the files within a directory.
-if(url.exists('ftp://ftp.wcc.nrcs.usda.gov')) {
+if(interactive() && url.exists('ftp://ftp.wcc.nrcs.usda.gov')) {
 
    url = 'ftp://ftp.wcc.nrcs.usda.gov/data/snow/snow_course/table/history/idaho/'
    filenames = getURL(url, ftp.use.epsv = FALSE, dirlistonly = TRUE)

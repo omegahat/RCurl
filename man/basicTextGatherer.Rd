@@ -164,11 +164,11 @@ if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
 
 
 \dontrun{
-Sys.setlocale(,"en_US.latin1")
-Sys.setlocale(,"en_US.UTF-8")
-uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.html")
-g = multiTextGatherer(uris)
-txt = getURIAsynchronous(uris,  write = g)
+ Sys.setlocale(,"en_US.latin1")
+ Sys.setlocale(,"en_US.UTF-8")
+ uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.html")
+ g = multiTextGatherer(uris)
+ txt = getURIAsynchronous(uris,  write = g)
 }
 }
 \keyword{IO}

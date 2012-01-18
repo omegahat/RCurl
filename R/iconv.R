@@ -2,6 +2,9 @@
 RCurlIconv =
 function(str, from = "C99", to = "UTF-8", check = TRUE, quiet = FALSE)
 {
+  to = toupper(to)
+  from = toupper(from)
+  
   if(check) {
     w = c(from, to) %in% iconvlist()
     if(!all(w)) {
