@@ -503,9 +503,9 @@ s,@build_alias@,|#_!!_#|,g
 s,@host_alias@,|#_!!_#|,g
 s,@target_alias@,|#_!!_#|,g
 s,@PKG_NAME@,|#_!!_#|RCurl,g
-s,@VERSION@,|#_!!_#|1.9-5,g
-s,@TAR_FILE@,|#_!!_#|RCurl_1.9-5.tar.gz,g
-s,@DATE@,|#_!!_#|17 January 2012,g
+s,@VERSION@,|#_!!_#|1.91-0,g
+s,@TAR_FILE@,|#_!!_#|RCurl_1.91-0.tar.gz,g
+s,@DATE@,|#_!!_#|31 January 2012,g
 s,@LIBOBJS@,|#_!!_#|,g
 s,@LTLIBOBJS@,|#_!!_#|,g
 :end
