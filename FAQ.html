@@ -473,6 +473,40 @@ that the "Custom Query results" cannot be displayed.
  lstOrder = I("Commodity%2FAttribute%2FCountry")
 </pre>
 
+<dt>
+<li> Okay, how do I perform a PUT operation in RCurl?
+    
+<dd>
+    Well here is the lowest-level version:
+<pre>
+ val = rawToChar(textToSend)
+ curlPerform(url = "http://localhost:9200/a/b/axyz", customrequest = "PUT",
+              readfunction = val, infilesize = length(val), upload = TRUE)
+</pre>
+<b>textToSend</b> is the content we want to send.
+ We convert it to raw. Then we
+    specify the URL, that we want a PUT request,
+    and we specify the raw object as the value for
+    <b>readfunction</b> and also the
+    number of elements in <b>val</b> as the
+    value of <b>infilesize</b>.
+    The last option - <b>upload</b> - is vital.
+    What happens here is that  RCurl
+    reads bytes from <b>val</b> as it needs
+    to send them to the server.
+    <p>
+    A slightly shorter way to do this is
+<pre>
+ httpPUT("http://localhost:9200/a/b/axyz", 
+          readfunction = val, infilesize = length(val), upload = TRUE)
+</pre>
+
+  From version 1.91-0, you can simply use
+<pre>
+httpPUT(url, textToSend)
+</pre>
+    and the function will fill in the other curl options
+
 </dl>
 
 
@@ -484,6 +518,6 @@ that the "Custom Query results" cannot be displayed.
 <address><a href="http://www.stat.ucdavis.edu/~duncan">Duncan Temple Lang</a>
 <a href=mailto:duncan@wald.ucdavis.edu>&lt;duncan@wald.ucdavis.edu&gt;</a></address>
 <!-- hhmts start -->
-Last modified: Fri Oct 28 06:56:41 PDT 2011
+Last modified: Tue Jan 31 19:00:33 PST 2012
 <!-- hhmts end -->
 </body> </html>

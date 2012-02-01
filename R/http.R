@@ -11,9 +11,22 @@ function(url, ..., curl = getCurlHandle())
 }
 
 PUT = httpPUT =
-function(url, ..., curl = getCurlHandle())
+function(url, content = NULL, ..., curl = getCurlHandle())
 {
-  getURLContent(url, ..., curl = curl, customrequest = "PUT")
+  if(!missing(content)) {
+       val = if(is.character(content))
+                charToRaw(paste(content, collapse = "\n"))
+             else if(is.raw(content))
+                content
+             else
+                stop("not certain how to convert content to the target type for a PUT request")
+       
+       getURLContent(url, infilesize = length(val),
+                          readfunction = val,
+                          upload = TRUE, 
+                          ..., curl = curl, customrequest = "PUT")
+  } else
+      getURLContent(url, ..., curl = curl, customrequest = "PUT")
 }
 
 DELETE = httpDELETE =
