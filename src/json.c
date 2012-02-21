@@ -96,7 +96,9 @@ SEXP mapString(const char *s, char *buf, size_t bufLen)
 		    cur[0] = '\f'; cur++;
 		    break;
 		case 'u':
-		    for( int j = 1; j <= 4; j++ )
+		    {
+                      int j;
+  		      for(j = 1; j <= 4; j++ )
 			if( ( ( s[ i + j ] >= 'a' && s[ i + j ] <= 'f' ) || 
 			      ( s[ i + j ] >= 'A' && s[ i + j ] <= 'F' ) ||
 			      ( s[ i + j ] >= '0' && s[ i + j ] <= '9' ) ) == FALSE ) {
@@ -112,7 +114,7 @@ SEXP mapString(const char *s, char *buf, size_t bufLen)
 		    cur += UTF8Encode2BytesUnicode( unicode, cur);
 
 		    i += 4; /* skip the four digits - actually point to last digit, which is then incremented outside of switch */
-		    
+		    }
 		    break;
 		default:
 		    cur[ 0 ] = s[ i ];
@@ -138,10 +140,10 @@ SEXP mapString(const char *s, char *buf, size_t bufLen)
 
 SEXP R_mapString(SEXP str, SEXP suggestedLen)
 {
-    int numEls = Rf_length(str);
+    int numEls = Rf_length(str), i;
     SEXP ans;
     PROTECT(ans = NEW_CHARACTER(numEls));
-    for(int i = 0; i < numEls; i++) {
+    for(i = 0; i < numEls; i++) {
 
 	int num;
 	if(Rf_length(suggestedLen))
