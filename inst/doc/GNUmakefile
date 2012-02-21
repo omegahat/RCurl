@@ -1,5 +1,9 @@
 philosophy.html:
 
+ifndef DYN_DOCS
+ DYN_DOCS=$(HOME)/Classes/StatComputing/XDynDocs/inst
+endif
+
 # HOME=D:/cygwin/home/duncan
 
 XSLTPROC=xsltproc
@@ -27,4 +31,4 @@ WEB_SITE=www.omegahat.org:/home3/WebSites/Omega/RCurl
 ship: philosophy.html
 	scp $^ $(WEB_SITE)
 
-include $(DYN_DOCS)/inst/Make/Makefile
+include $(DYN_DOCS)/Make/Makefile

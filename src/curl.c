@@ -960,7 +960,15 @@ R_call_R_write_function(SEXP fun, void *buffer, size_t size, size_t nmemb, RWrit
 //      nmemb =- 2;
 //    }
 	    // probably don't need the encoding at this point!
+#if 0
+        const char *tmp;
+	int len = size * nmemb;
+	tmp = Rf_reEnc(buffer, CE_NATIVE, CE_UTF8, 0);
+	len = strlen(tmp);
+	PROTECT(str = mkCharLenCE(tmp, len, encoding));
+#else
 	PROTECT(str = mkCharLenCE(buffer, size * nmemb, encoding));
+#endif
 #else
 	/* PROTECT(str = mkCharLen(buffer, size * nmemb)); */
 //        PROTECT(str = mkCharLen(buffer, size *nmemb));  /* Problems with the upload example in complete.Rd */

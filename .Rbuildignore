@@ -19,3 +19,5 @@ cookies.R
 hang.R
 postFormEg.R
 manyConnections.R
+.*\.log
+.*\.aux

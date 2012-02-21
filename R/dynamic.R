@@ -142,10 +142,9 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
 
     encode =
       function(str) {
-        if(grepl("\\\\u[0-9]", str))
-           RCurlIconv(str, from = "C99", to = encoding)
-        else
-           str           
+       #     RCurlIconv(str, from = "C99", to = encoding)
+           mapUnicodeEscapes(str)
+                   
       }
 
 
@@ -158,4 +157,21 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
     class(ans) <- c("DynamicRCurlTextHandler", "RCurlTextHandler", "RCurlCallbackFunction")
     ans$reset()
     ans  
+}
+
+mapUnicodeEscapes =
+  #
+  #  processes the string, converting \u<hex>{4} sequences to bytes
+  #  and returning a UTF-8 encoded string.
+  #
+  #
+function(str, len = nchar(str) * 4L)
+{
+   str = as.character(str)
+   len = rep(as.integer(len), length = length(str))
+   
+   if(any(grepl("\\\\u[0-9A-Fa-f]", str)))
+     .Call("R_mapString", str, len, PACKAGE = "RCurl")
+   else
+     str
 }

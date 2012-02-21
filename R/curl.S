@@ -86,13 +86,14 @@ function(txt = character(), max = NA, value = NULL)
 
   val = if(missing(value))
             function(collapse="", ...) {
+                         txt = mapUnicodeEscapes(txt)
                          if(is.null(collapse))
                              return(txt)
                                   
                          paste(txt, collapse = collapse, ...)
             }
         else
-          function() value(txt)
+          function() value(mapUnicodeEscapes(txt))
   
 
   ans = list(update = update,
