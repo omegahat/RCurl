@@ -967,8 +967,11 @@ R_call_R_write_function(SEXP fun, void *buffer, size_t size, size_t nmemb, RWrit
 	len = strlen(tmp);
 	PROTECT(str = mkCharLenCE(tmp, len, encoding));
 #else
+
 	PROTECT(str = mkCharLenCE(buffer, size * nmemb, encoding));
+
 #endif
+
 #else
 	/* PROTECT(str = mkCharLen(buffer, size * nmemb)); */
 //        PROTECT(str = mkCharLen(buffer, size *nmemb));  /* Problems with the upload example in complete.Rd */

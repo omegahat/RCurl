@@ -155,7 +155,7 @@ SEXP R_mapString(SEXP str, SEXP suggestedLen)
 		ERROR;
 	}
 
-	SET_VECTOR_ELT(ans, i, mapString(CHAR(STRING_ELT(str, i)), buf, INTEGER(suggestedLen)[i]));
+	SET_STRING_ELT(ans, i, mapString(CHAR(STRING_ELT(str, i)), buf, INTEGER(suggestedLen)[i]));
     }
 
     UNPROTECT(1);
