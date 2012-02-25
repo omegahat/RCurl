@@ -70,7 +70,7 @@ basicTextGatherer =
   # The function that reads the text can do whatever it wants with it. This one simply
   # cumulates it and makes it available via a second function. 
   #
-function(txt = character(), max = NA, value = NULL)
+function(txt = character(), max = NA, value = NULL, .mapUnicode = TRUE)
 {
   update = function(str) {
     txt <<-   c(txt, str)
@@ -86,14 +86,20 @@ function(txt = character(), max = NA, value = NULL)
 
   val = if(missing(value))
             function(collapse="", ...) {
-                         txt = mapUnicodeEscapes(txt)
-                         if(is.null(collapse))
-                             return(txt)
-                                  
-                         paste(txt, collapse = collapse, ...)
+                         if(!is.null(collapse))
+   	                    txt = paste(txt, collapse = collapse)
+                         if(.mapUnicode)
+                            txt = mapUnicodeEscapes(txt)
+                         return(txt)
             }
         else
-          function() value(mapUnicodeEscapes(txt))
+          function() {
+	     if(!is.null(collapse))
+                txt = paste(txt, collapse = "")
+	     if(.mapUnicode)
+               txt = mapUnicodeEscapes()
+             value(txt)
+          }
   
 
   ans = list(update = update,
@@ -117,8 +123,8 @@ getURL = getURI =
   #
   # initializes a curl handle, populates its settingsc
   #
-function(url, ..., .opts = list(), write = basicTextGatherer(), curl = getCurlHandle(),
-          async = length(url) > 1, .encoding = integer())
+function(url, ..., .opts = list(), write = basicTextGatherer(.mapUnicode = .mapUnicode), curl = getCurlHandle(),
+          async = length(url) > 1, .encoding = integer(), .mapUnicode = TRUE)
 {
 #    write = getNativeSymbolInfo("R_curl_write_data", PACKAGE = "RCurl")$address
 

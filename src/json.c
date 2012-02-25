@@ -51,24 +51,43 @@ int UTF8Encode2BytesUnicode( unsigned short input, char * s )
 }
 
 
-SEXP mapString(const char *s, char *buf, size_t bufLen)
+#define ASSERT(cond)  if(!(cond)) \ 
+       PROBLEM "overrunning buffers in mapString" \
+       ERROR;
+
+/* Convert a string with \unnnn elements to its Unicode form.
+  s - the input string
+  nchar - the number of characters in s.
+  buf - the output string
+  bufLen - the number of bytes available in buf.
+ */
+SEXP mapString(const char *s, int nchar, char *buf, size_t bufLen)
 {
 	int i = 0; 
-	int nchar = strlen(s);
 	buf[0] = '\0';
 	char *cur = buf;
 
 	while( i < nchar ) {
-	    while(i < nchar && s[ i ] != '\\' && s[ i ] != '\0') {
+	    while(i < nchar && cur < buf + bufLen && 
+                     s[ i ] != '\\' && s[ i ] != '\0') {
 		cur[0] = s[i];
 		i++; cur++;
 	    }
+
+            if(i >= nchar || cur >= buf + bufLen )
+		break;	
 
 	    if(s[i] == '\0')
 		break;
 
 	    if( s[ i ] == '\\' ) {
 		i++;
+		if(i >= nchar) {
+		    PROBLEM "ending string with an escape: %d > %d", (int) i, (int) nchar
+			WARN;
+		    break;
+		}
+
 		switch( s[ i ] ) {
 		case '"':
 		    cur[0] = '\\';
@@ -98,8 +117,12 @@ SEXP mapString(const char *s, char *buf, size_t bufLen)
 		case 'u':
 		    {
                       int j;
+		      if(i > nchar - 3) {
+			  PROBLEM "walking passed the end"
+			      ERROR;
+		      }
   		      for(j = 1; j <= 4; j++ )
-			if( ( ( s[ i + j ] >= 'a' && s[ i + j ] <= 'f' ) || 
+			if( (i + j >= nchar) || ( ( s[ i + j ] >= 'a' && s[ i + j ] <= 'f' ) || 
 			      ( s[ i + j ] >= 'A' && s[ i + j ] <= 'F' ) ||
 			      ( s[ i + j ] >= '0' && s[ i + j ] <= '9' ) ) == FALSE ) {
 			    PROBLEM "unexpected unicode escaped char '%c'; 4 hex digits should follow the \\u (found %i valid digits)", s[ i + j ], j - 1 
@@ -120,24 +143,22 @@ SEXP mapString(const char *s, char *buf, size_t bufLen)
 		    cur[ 0 ] = s[ i ];
 		    cur++;
 		    break;		    
-/*
-		    PROBLEM  "unexpected escaped character '\\%c' at position %d", s[ i ], i + 1
-			ERROR;
-*/
-		    break;
 		}
 
 		i++; /* move to next char */
 	    }
 	}
 	cur[0] = '\0';
+
+	ASSERT(i <= nchar && cur < buf + bufLen)
 	
 
 	return(mkCharCE( buf, CE_UTF8 ));
 }
 
 
-
+/* R interface to mapString.  Takes a vector of strings and a 
+   a same length integer vector of lengths. */
 SEXP R_mapString(SEXP str, SEXP suggestedLen)
 {
     int numEls = Rf_length(str), i;
@@ -157,7 +178,9 @@ SEXP R_mapString(SEXP str, SEXP suggestedLen)
 		ERROR;
 	}
 
-	SET_STRING_ELT(ans, i, mapString(CHAR(STRING_ELT(str, i)), buf, INTEGER(suggestedLen)[i]));
+	const char *tmp;
+	tmp = CHAR(STRING_ELT(str, i));
+	SET_STRING_ELT(ans, i, mapString(tmp, strlen(tmp), buf, INTEGER(suggestedLen)[i]));
     }
 
     UNPROTECT(1);
