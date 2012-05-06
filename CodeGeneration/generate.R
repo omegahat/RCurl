@@ -113,3 +113,9 @@ cat(paste(sapply(c("integer", "numeric", "character"), function(x)  sprintf("\\a
 
 
  # CURLPROTO
+
+
+i = grep("CURLAUTH", names(defs$macros))
+auth = defs$macros[i]
+
+BitwiseValue()

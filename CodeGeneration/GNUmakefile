@@ -15,3 +15,7 @@ CC=gcc
 
 ../inst/enums/Renums.c: enum.tu
 	R --no-save < generate.R
+
+auth.so: auth.c
+	$(R_HOME)/bin/R CMD SHLIB $^ 
+

@@ -51,7 +51,8 @@
   several URIs. See \code{\link{getURIAsynchronous}}.
 }
 \usage{
-basicTextGatherer(txt = character(), max = NA, value = NULL)
+basicTextGatherer(txt = character(), max = NA, value = NULL,
+                    .mapUnicode = TRUE)
 multiTextGatherer(uris)
 debugGatherer()
 }
@@ -73,6 +74,9 @@ debugGatherer()
     processing of the response. This function can be used to convert the
     result into a different format, e.g. parse an XML document,
     read values from table in the text.}
+  \item{.mapUnicode}{a logical value that controls whether the resulting
+  text is processed to map components of the form \\uxxxx to their
+  appropriate Unicode representation.}  
 }
 \details{
   This is called when the libcurl engine finds sufficient

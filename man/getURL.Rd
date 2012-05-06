@@ -26,10 +26,14 @@
   concurrent requests at present.
 }
 \usage{
-getURL(url, ..., .opts = list(), write = basicTextGatherer(),
-         curl = getCurlHandle(), async = length(url) > 1, .encoding = integer())
-getURI(url, ..., .opts = list(), write = basicTextGatherer(),
-         curl = getCurlHandle(), async = length(url) > 1, .encoding = integer())
+getURL(url, ..., .opts = list(),
+        write = basicTextGatherer(.mapUnicode = .mapUnicode),
+         curl = getCurlHandle(), async = length(url) > 1,
+           .encoding = integer(), .mapUnicode = TRUE)
+getURI(url, ..., .opts = list(), 
+        write = basicTextGatherer(.mapUnicode = .mapUnicode),
+         curl = getCurlHandle(), async = length(url) > 1,
+          .encoding = integer(), .mapUnicode = TRUE)
 getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
                binary = NA, .opts = list(...),
                header = dynCurlReader(curl, binary = binary,
@@ -78,6 +82,9 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
     specifying this avoids this slight overhead which is probably
     quite small relative to network latency and speed.
   }
+  \item{.mapUnicode}{a logical value that controls whether the resulting
+  text is processed to map components of the form \\uxxxx to their
+  appropriate Unicode representation.}
   \item{binary}{a logical value indicating whether the caller  knows
     whether the resulting content is binary (\code{TRUE}) or not
     (\code{FALSE}) or unknown (\code{NA}).

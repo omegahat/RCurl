@@ -73,7 +73,7 @@ basicTextGatherer =
 function(txt = character(), max = NA, value = NULL, .mapUnicode = TRUE)
 {
   update = function(str) {
-    txt <<-   c(txt, str)
+    txt <<- c(txt, str)
     if(!is.na(max) && nchar(txt) >= max)
       return(0)
     
@@ -85,7 +85,7 @@ function(txt = character(), max = NA, value = NULL, .mapUnicode = TRUE)
   reset = function() {  txt <<- character() }
 
   val = if(missing(value))
-            function(collapse="", ...) {
+            function(collapse = "", ...) {
                          if(!is.null(collapse))
    	                    txt = paste(txt, collapse = collapse)
                          if(.mapUnicode)
@@ -93,11 +93,11 @@ function(txt = character(), max = NA, value = NULL, .mapUnicode = TRUE)
                          return(txt)
             }
         else
-          function() {
+          function(collapse = "") {
 	     if(!is.null(collapse))
-                txt = paste(txt, collapse = "")
+                txt = paste(txt, collapse = collapse)
 	     if(.mapUnicode)
-               txt = mapUnicodeEscapes()
+               txt = mapUnicodeEscapes(txt)
              value(txt)
           }
   

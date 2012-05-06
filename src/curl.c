@@ -58,7 +58,7 @@ R_curl_easy_init(void)
 /*XX Debugging options */
  	    curl_easy_setopt(obj, CURLOPT_HTTPAUTH, CURLAUTH_ANY); /* or CURLAUTH_BASIC*/
 
-	    if(status = curl_easy_setopt(obj, CURLOPT_ERRORBUFFER, RCurlErrorBuffer))
+	    if( (status = curl_easy_setopt(obj, CURLOPT_ERRORBUFFER, RCurlErrorBuffer)))
 		getCurlError(obj, 1, status);
 
 	}
@@ -121,8 +121,10 @@ R_curl_easy_reset(SEXP handle)
 {
 	CURL *obj;
    	obj = getCURLPointerRObject(handle);
-	if(obj)
+	if(obj) {
 	    curl_easy_reset(obj);
+	    curl_easy_setopt(obj, CURLOPT_ERRORBUFFER, RCurlErrorBuffer);
+	}
 
 	return(ScalarLogical( obj ? TRUE : FALSE));
 }

@@ -507,6 +507,20 @@ httpPUT(url, textToSend)
 </pre>
     and the function will fill in the other curl options
 
+
+
+<dt>
+<li> When using authentication in an HTTP request, libcurl makes multiple
+    requests.     How can we make this more efficient?
+<dd>
+    Basically, when we specify a username and password (e.g. via <code
+    class="curlopt">userpwd</code>)
+    libcurl doesn't know which authentication mechanism to use.
+    So it tries several in order until one is successful.
+    So it is best to specify the authentication mechanism explicitly
+    via <code class="curlopt">httpauth</code>.
+    Specify one of the values CURLAUTH_
+    
 </dl>
 
 
@@ -518,6 +532,6 @@ httpPUT(url, textToSend)
 <address><a href="http://www.stat.ucdavis.edu/~duncan">Duncan Temple Lang</a>
 <a href=mailto:duncan@wald.ucdavis.edu>&lt;duncan@wald.ucdavis.edu&gt;</a></address>
 <!-- hhmts start -->
-Last modified: Tue Jan 31 19:00:33 PST 2012
+Last modified: Fri Apr 20 08:15:09 PDT 2012
 <!-- hhmts end -->
 </body> </html>
