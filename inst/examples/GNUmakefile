@@ -22,6 +22,11 @@ endif
 # %.html: %.xml $(OMEGA_HOME)/Docs/XSL/Rexample.xsl
 #	$(XSLTPROC) $(XSLT_FLAGS) --output $@ $(XSL_HTML_STYLE_FILE) $< 
 
-include $(DYN_DOCS)/inst/Make/Makefile
+ifndef DYN_DOCS
+ DYN_DOCS=$(HOME)/Classes/StatComputing/XDynDocs/inst
+endif
+
+include $(DYN_DOCS)/Make/Makefile
+
 
 

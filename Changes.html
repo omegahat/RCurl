@@ -3,6 +3,23 @@
 <title>Change log for RCurl</title>
 </head>
 <body>
+<h2>1.93-0</h2>
+<dl>
+  <dt>
+  <li> getURLContent()'s header parameter can be TRUE or FALSE. TRUE
+      returns the header along with the body as a list containing just
+      these two elements.
+  <dd>
+
+  <dt>
+  <li>  postForm() coerces its arguments to characters so we can pass
+        values of arbitrary types.
+  <dd>
+  <dt>
+  <li>  postForm() checks the header in the response and throws an
+        error if the request was not successful.
+  <dd>
+</dl>
 <h2>1.92-1</h2>
 <dl>
   <dt>
@@ -940,6 +957,6 @@ getURL('https://sourceforge.net', ssl.verifypeer = FALSE)
 <address><a href="http://www.stat.ucdavis.edu/~duncan">Duncan Temple Lang</a>
 <a href=mailto:duncan@wald.ucdavis.edu>&lt;duncan@wald.ucdavis.edu&gt;</a></address>
 <!-- hhmts start -->
-Last modified: Sat May  5 15:38:41 PDT 2012
+Last modified: Mon Jun  4 07:02:40 PDT 2012
 <!-- hhmts end -->
 </body> </html>

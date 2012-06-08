@@ -117,7 +117,7 @@ function(uri, ...,
                   collapse = "&")
             
    } else
-     .params = as.list(.params)
+     .params = lapply(.params, as, "character") # as.list(.params)
   
 
   if(length(.params) == 0) {
@@ -135,6 +135,11 @@ function(uri, ...,
      curlSetOpt(httpget = TRUE, curl = curl)
   }
 
+  if(!is.null(write)) {
+     http.header = parseHTTPHeader(write$header())
+     stop.if.HTTP.error(http.header)
+  }
+  
   if(!is.null(buf)) {
     processContent( as(buf, "raw"), header, .encoding)
   } else  if(!is.null(write)) 

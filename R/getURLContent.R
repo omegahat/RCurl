@@ -12,20 +12,45 @@ function(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA, binary =
 {
   if(!missing(curl))
      curlSetOpt(.opts = .opts, curl = curl)
-  if(!'headerfunction' %in% names(.opts)) {
+
+  if(is.logical(header)) {
+     returnHeader = header
+     header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding)
+  } else
+     returnHeader = FALSE
+  
+  if(!('headerfunction' %in% names(.opts))) {
     # .opts$headerfunction = header$update
      protect = missing(header)
-     curlSetOpt(curl = curl, .isProtected = protect, headerfunction = header$update)
+     curlSetOpt(curl = curl, .isProtected = protect,
+                 headerfunction = header$update)
    }
+  
+  if(!isHTTP && !('writefunction' %in% names(.opts))) {
+      # If for example this is scp where there is no header
+      # or headerfunction will never get called. So we have to
+      # set the writefunction as well.
+    # .opts$headerfunction = header$update
+     protect = missing(header)
+     curlSetOpt(curl = curl, .isProtected = protect,
+                 writefunction = header$update)
+   }  
   
   curlPerform(url = url, curl = curl, .opts = .opts)
   
   if(isHTTP && length(header$header())) {
-    http.header = parseHTTPHeader(header$header())
-    stop.if.HTTP.error(http.header)
+     http.header = parseHTTPHeader(header$header())
+     stop.if.HTTP.error(http.header)
   }
-  
-  header$value()
+
+  if(returnHeader)
+    list(header = if(is(returnHeader, "AsIs"))
+                      header$header()
+                  else
+                      parseHTTPHeader(header$header()),
+         body = header$value())
+  else
+    header$value()
 }
 
 stop.if.HTTP.error = 

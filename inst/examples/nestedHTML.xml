@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../../../Docs/XSL/Rexample.xsl" ?>
 <?xml-stylesheet type="text/xsl" href="http://www.omegahat.org/XSL/Rexample.xsl" ?>
 
-<r:example xmlns:r="http://www.r-project.org"
+<article xmlns:r="http://www.r-project.org"
            xmlns:s="http://cm.bell-labs.com/stat/S4">
 
 <title>Nested HTML Downloads</title>
@@ -132,7 +132,7 @@ To get the original document also, we have to look inside the
 <s:var>streams</s:var> object and ask it for the contents that it
 downloaded.  This is why we called
 <s:func>HTMLReaderXMLParser</s:func> with <s:true/> for the
-<s:param>save</s:param> argument.
+<r:param>save</r:param> argument.
 
 
 <para/>
@@ -222,4 +222,4 @@ Works
 -->
 </r:init>
 
-</r:example>
+</article>

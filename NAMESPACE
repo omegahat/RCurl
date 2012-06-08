@@ -62,7 +62,8 @@ export(scp)
 export(guessMIMEType)
 
  # do we want a httpPOST.
-export(httpPUT, httpDELETE, httpGET, httpPOST)
+export(httpPUT, httpDELETE, httpGET, httpPOST, httpHEAD)
+export(httpOPTIONS)
 
 export(getFormParams)
 
@@ -74,3 +75,7 @@ export(curlError)
 
 #export(CURLAUTH_ONLY, CURLAUTH_ANY, CURLAUTH_NTLM, CURLAUTH_ANYSAFE, CURLAUTH_NTLM_WB,
 #       CURLAUTH_DIGEST_IE, CURLAUTH_BASIC, CURLAUTH_DIGEST, CURLAUTH_GSSNEGOTIATE, CURLAUTH_NONE)
+
+export(clone)
+exportMethods(clone)
+export(getCurlErrorClassNames)

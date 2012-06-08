@@ -24,7 +24,7 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
 #(length(header) == 0 || curHeaderStatus %in% c(-1, 100))
                                                            # do we want a \\\n at the end of the string to avoid
                                                            # matching lines with white space in the body.
-	if(!inBody && (length(str) == 0 || length(grep("^[[:space:]]+$", str)))) {
+      if(!inBody && (length(str) == 0 || length(grep("^[[:space:]]+$", str)))) {
               # Found the end of the header so wrapup the text and put it into the header variable
           oldHeader = header
 	  header <<- c(txt, "")
@@ -32,11 +32,11 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
           if(is.na(isHTTP)) 
             isHTTP <<- length(grep("HTTP", header)) > 0
 
-      if(isHTTP) {
-          http.header = parseHTTPHeader(c(header, str))
+          if(isHTTP) {
+             http.header = parseHTTPHeader(c(header, str))
 
-          if(http.header[["status"]] == 100) { # && length(http.header) == 2)
-               curHeaderStatus <<- 100
+            if(http.header[["status"]] == 100) { # && length(http.header) == 2)
+                 curHeaderStatus <<- 100
                    # see if there are any attributes to keep other than status and statusMessage.
                val.ids = setdiff(names(http.header), c("status", "statusMessage", "message"))  # ?? should we add "message"
 
@@ -46,20 +46,20 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
                  header <<- character()
 
                return(nchar(str, "bytes"))
-          } else
-             curHeaderStatus = http.header[["status"]]
+            } else
+              curHeaderStatus = http.header[["status"]]
 
-          if(length(oldHeader)) {
+            if(length(oldHeader)) {
               tmp = setdiff(names(oldHeader), names(header))
               if(length(tmp))
                  header[tmp] <<- oldHeader[tmp]
-          }          
+            }          
 
          
-          content.type <<- getContentType(http.header, TRUE)
+            content.type <<- getContentType(http.header, TRUE)
 
-          if(is.na(binary))
-            binary = isBinaryContent(http.header, list(http.header["Content-Encoding"], content.type) )
+            if(is.na(binary))
+               binary = isBinaryContent(http.header, list(http.header["Content-Encoding"], content.type) )
           
 
              # This happens when we get a "HTTP/1.1 100 Continue\r\n" and then
@@ -69,8 +69,10 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
              inBody <<- FALSE
              return( nchar(str, "bytes") )
           }
-       }          
-
+       } else {  # if(isHTTP)
+         
+       }
+          
 	  if(verbose)
               cat("Setting option to read content-type", content.type[1], "character set", content.type["charset"], "\n")
 	  if(length(content.type) == 0 || (is.na(binary) || binary)) {

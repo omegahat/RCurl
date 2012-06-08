@@ -96,6 +96,15 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
     call to \code{dynCurlReader}, e.g. to specify a
     function for its \code{value} parameter to
     control how the body is post-processed.
+    
+    The caller can specify a value of \code{TRUE} or \code{FALSE}
+    for this parameter.  \code{TRUE} means that the header will be
+    returned along with the body; \code{FALSE} corresponds to the
+    default  and only the body will be returned.
+    When returning the header, it is first parsed via
+    \code{\link{parseHTTPHeader}},
+    unless the value of \code{header} is of class \code{AsIs}.
+    So to get the raw header, pass the argument as \code{header = I(TRUE)}.
   }
   \item{isHTTP}{a logical value that indicates whether the request an
   HTTP request. This is used when determining how to process the response.}

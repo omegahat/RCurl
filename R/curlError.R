@@ -15,3 +15,10 @@ function(type, msg, asError = TRUE)
 
    fun( structure(list(message = msg, call = sys.call()), class = c(typeName, "GenericCurlError", "error", "condition")) )
 }
+
+
+getCurlErrorClassNames =
+function()
+{
+  gsub("^CURLE_", "", names(CURLcodeValues))
+}

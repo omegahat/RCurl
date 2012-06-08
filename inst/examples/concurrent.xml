@@ -3,7 +3,7 @@
 <?xml-stylesheet type="text/xsl" href="http://www.omegahat.org/XSL/Rexample.xsl" ?>
 
 
-<r:example xmlns:r="http://www.r-project.org"
+<article xmlns:r="http://www.r-project.org"
            xmlns:s="http://cm.bell-labs.com/stat/S4"
            xmlns:c="http://www.C.org">
 <package name="RCurl"/>
@@ -199,4 +199,4 @@ of system resources.
 library(RCurl)
 </r:init>
 
-</r:example>
+</article>

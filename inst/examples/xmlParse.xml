@@ -3,7 +3,7 @@
 <?xml-stylesheet type="text/xsl" href="http://www.omegahat.org/XSL/Rexample.xsl" ?>
 
 
-<r:example xmlns:r="http://www.r-project.org"
+<article xmlns:r="http://www.r-project.org"
            xmlns:s="http://cm.bell-labs.com/stat/S4">
 <package name="RCurl"/>
 <title>
@@ -25,7 +25,7 @@ returned from Web queries.
 
 <para/>
 
-To do this, we need to use the <b>multi</b> interface for libcurl
+To do this, we need to use the <emphasis>multi</emphasis> interface for libcurl
 in order to have asynchronous  or non-blocking downloading of the document.
 The idea is quite simple.  We initiate the download and associate a
 "writer" to slurp up the body of the HTTP response. This is registered
@@ -283,5 +283,6 @@ substring(txt, 1, nchar(other)) == other
 </section>
 
 
-</r:example>
+</article>
+
 

@@ -7,7 +7,7 @@ function(url, ..., curl = getCurlHandle())
 httpPOST =
 function(url, ..., curl = getCurlHandle())
 {
-  getURLContent(url, .opts = list(...), curl = curl, post = 1L)
+  getURLContent(url, .opts = list(customrequest = "POST", ...), curl = curl, post = 1L)
 }
 
 PUT = httpPUT =
@@ -44,7 +44,8 @@ function(url, ..., curl = getCurlHandle())
 httpOPTIONS =
 function(url, ..., curl = getCurlHandle())
 {
-  getURLContent(url, customrequest = "OPTIONS", ..., curl = curl)
+  ans = getURLContent(url, customrequest = "OPTIONS", ..., curl = curl, header = TRUE)
+  ans$header
 }
 
 
