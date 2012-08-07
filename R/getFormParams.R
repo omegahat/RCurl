@@ -37,6 +37,12 @@ function(query, isURL = grepl("^(http|\\?)", query))
   if(any(i <- is.na(ans)))
      ans[i] = ""
 
+  names(ans) = trim(names(ans))
   ans
 }
+
+trim =
+function(x)
+  gsub("(^[[:space:]]+|[[:space:]]$)", "", x)
+
 

@@ -1,3 +1,9 @@
+.onAttach =
+function(...)
+ library(methods)
+
+         
+
 setClass("MultiCURLHandle",
            representation(ref = "externalptr",
                           subhandles = "list"))

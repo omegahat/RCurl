@@ -4,7 +4,7 @@ CURL_CONFIG=/usr/local/bin/curl-config
 # CURL_LIBS=$(shell $(CURL_CONFIG) --libs)
 
 CURL_CFLAGS=-I/usr/local/include
-CURL_LIBS=-L/usr/local/lib -lcurl -lssh2 -lssl -lcrypto -lldap -lssl -lcrypto -lz -lz
+CURL_LIBS=-L/usr/local/lib -lcurl -lidn -lssh2 -lssl -lcrypto -lldap -lssl -lcrypto -lz -lz
 
 
 # -DRCURL_DEBUG_MEMORY

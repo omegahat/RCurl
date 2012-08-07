@@ -25,9 +25,9 @@ function(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle()
                                 paste(id, curlEscape(val), sep="=", collapse="&")
                }, names(.params), .params)
 
-   args = paste(els, collapse="&")
+   args = paste(els, collapse = "&")
 
-   uri = paste(uri, args, sep="?")
+   uri = paste(uri, args, sep = if(grepl("\\?", uri)) "&" else "?")
 
    getURLContent(uri, .opts = .opts, .encoding = .encoding, binary = binary, curl = curl)
 }

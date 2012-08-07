@@ -12,10 +12,12 @@ getURLAsynchronous = getURIAsynchronous =
 
   #  If you call this function, you get to download the 
   #
-function(url, ..., .opts = list(), write = multiTextGatherer(url), curl = getCurlHandle(),
-          multiHandle = getCurlMultiHandle(), perform = Inf, .encoding = integer())
+function(url, ..., .opts = list(), write = NULL, curl = getCurlHandle(),
+          multiHandle = getCurlMultiHandle(), perform = Inf, .encoding = integer(), binary = rep(NA, length(url)))
 {
-  if(!is.list(write)) 
+  writeSupplied = !missing(write)
+  
+  if(!is.null(write) && !is.list(write)) 
      write = replicate(length(url), write)
 
 
@@ -26,17 +28,33 @@ function(url, ..., .opts = list(), write = multiTextGatherer(url), curl = getCur
 
   if(length(.encoding))
     .encoding = rep(.encoding, length = length(url))
+
+  if(is.null(write)) {
+    writeSupplied = FALSE
+    write = mapply(function(curl, url, binary) {
+                       force(url); force(curl); force(binary)
+                       dynCurlReader(curl, baseURL = url, binary = binary)
+                    },
+                    curl, url, binary, SIMPLIFY = FALSE)
+  }
+             
   
   for(i in seq(along = url)) {
     w = write[[i]]
-    if(inherits(w, "RCurlCallbackFunction"))
-         w = w$update
-    opts = curlOptions(URL = url[i], writefunction = w, ..., .opts = .opts)
+    if(inherits(w, "DynamicRCurlTextHandler")) {
+        .opts[["headerfunction"]] =  w$update
+        .opts[["writefunction"]] = w$update        
+    } else if(inherits(w, "RCurlCallbackFunction"))
+         .opts[["writefunction"]] = w$update
+    else
+         .opts[["writefunction"]] = w
+
+    opts = curlOptions(URL = url[i], ..., .opts = .opts)
     curlSetOpt(.opts = opts, curl = curl[[i]], .encoding = if(length(.encoding)) .encoding[i] else integer())
   
     multiHandle = push(multiHandle, curl[[i]])
   }
-  
+
   if(perform > 0) {
         ctr = 0
         while(TRUE) {
@@ -45,8 +63,9 @@ function(url, ..., .opts = list(), write = multiTextGatherer(url), curl = getCur
           if(status[2] == 0 || ctr > perform)
             break
         }
-        if(status[2] == 0 && inherits(write, "MultiTextGatherer"))
-           return(sapply(write, function(w) w$value()))
+        if(status[2] == 0 && (!writeSupplied || inherits(write, "MultiTextGatherer")))
+             return(sapply(write, function(w) w$value()))
+        
   }
 
      # Need to get the new write functions back if we didn't
@@ -66,7 +85,7 @@ setMethod("complete", "MultiCURLHandle",
   
 
 multiTextGatherer =
-function(uris)
+function(uris, binary = rep(NA, length(uris)))
 {
   if(is.numeric(uris))
      ans = lapply(1:uris, basicTextGatherer)
@@ -81,9 +100,11 @@ function(uris)
 }  
 
 getCurlMultiHandle =
-function()
+function(..., .handles = list(...))
 {
-  .Call("R_getCurlMultiHandle", PACKAGE = "RCurl")
+  ans = .Call("R_getCurlMultiHandle", PACKAGE = "RCurl")
+  lapply(.handles, function(h)  push(ans, h))
+  ans         
 }
 
 

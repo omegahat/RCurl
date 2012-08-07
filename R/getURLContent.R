@@ -60,9 +60,10 @@ function(http.header)
   if(length(http.header) == 0)
     return(NA) # or TRUE
   
-  if( floor(as.integer(http.header[["status"]])/100) == 4) {
+  if( floor(as.integer(http.header[["status"]])/100) >= 4) {
      klass =  RCurl:::getHTTPErrorClass(http.header[["status"]])
      err = simpleError(http.header[["statusMessage"]])
+     err$httpHeader = http.header
      class(err) = c(klass, class(err))
      #signalCondition(err)
      stop(err)

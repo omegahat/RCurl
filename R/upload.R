@@ -56,3 +56,11 @@ function(filename, mode = "r")
    filename = path.expand(filename)
    .Call("R_openFile", filename, as.character(mode))
 }
+
+
+setMethod("close", "CFILE",
+           function(con, ...) {
+             .Call("R_closeCFILE", con@ref, PACKAGE = "RCurl")
+             con
+          })
+

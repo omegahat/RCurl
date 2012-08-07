@@ -25,9 +25,12 @@ debugGatherer =
 function()
 {
   els = NULL
+  info = NULL
   
   update = function(msg, type, curl)  {
     els[[type + 1]] <<- c(els[[type + 1]], msg)
+    info[[length(info) + 1]] <<- msg
+    names(info)[length(info)] <<- names(type)
     0
   }
 
@@ -39,10 +42,15 @@ function()
                               dataOut = character(),
                               sslDataIn = character(),
                               sslDataOut = character())
+
+                       info <<- list()
                      }
 
   ans = list(update = update,
-             value = function(collapse="", ...) {
+             value = function(collapse = "", ordered = FALSE, ...) {
+                         if(ordered)
+                           return(info)
+                         
                          if(is.null(collapse))
                            return(els)
                                  

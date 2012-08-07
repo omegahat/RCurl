@@ -255,13 +255,31 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 	return(makeCURLcodeRObject(status));
 }
 
+void
+R_closeFILE(SEXP r_file)
+{
+    FILE *f = (FILE *) R_ExternalPtrAddr(r_file);
+    if(f)  {
+        fflush(f);
+	fclose(f);
+	R_SetExternalPtrAddr(r_file, NULL); // R_NilValue);
+    }
+}
+
+SEXP
+R_closeCFILE(SEXP r_file)
+{
+    R_closeFILE(r_file);
+    return(r_file);
+}
+
 SEXP
 R_openFile(SEXP r_filename, SEXP r_mode)
 {
     const char *filename = CHAR(STRING_ELT(r_filename, 0));
     const char *mode = CHAR(STRING_ELT(r_mode, 0));
     FILE *ans;
-    SEXP r_ans, klass;
+    SEXP r_ans, klass, tmp;
 
     ans = fopen(filename, mode);
     if(!ans) {
@@ -270,7 +288,8 @@ R_openFile(SEXP r_filename, SEXP r_mode)
     }
     PROTECT(klass = MAKE_CLASS("CFILE"));
     PROTECT(r_ans = NEW(klass));
-    SET_SLOT(r_ans, Rf_install("ref"), R_MakeExternalPtr(ans, Rf_install("FILE"), R_NilValue));
+    SET_SLOT(r_ans, Rf_install("ref"), tmp = R_MakeExternalPtr(ans, Rf_install("FILE"), R_NilValue));
+    R_RegisterCFinalizer(tmp, R_closeFILE);
     UNPROTECT(2);
     return(r_ans);
 }
@@ -996,8 +1015,14 @@ R_call_R_write_function(SEXP fun, void *buffer, size_t size, size_t nmemb, RWrit
 
 	PROTECT(ans = Rf_eval(e, R_GlobalEnv)); /* , &errorOccurred); */
 	if(TYPEOF(ans) == LGLSXP) {
+	    if(LOGICAL(ans)[0])
+		numRead = size*nmemb;
+	    else
+		numRead = 0;
+/*
              if(LOGICAL(ans)[0] == 1)
 		errorOccurred = 1;
+*/
 	} else if(TYPEOF(ans) == INTSXP) {
 		numRead = INTEGER(ans)[0];
 	} else 
@@ -1077,10 +1102,16 @@ R_curl_write_data(void *buffer, size_t size, size_t nmemb, RWriteDataInfo *data)
 
 #include <Rversion.h>
 
+const char const *CurlInfoTypeNames[] =  {
+    "TEXT", "HEADER_IN", "HEADER_OUT",
+    "DATA_IN", "DATA_OUT", "SSL_DATA_IN", "SSL_DATA_OUT", 
+    "END"
+};
+
 int
 R_curl_debug_callback (CURL *curl, curl_infotype type, char  *msg,  size_t len,  SEXP fun)
 {
-	SEXP str, e;
+        SEXP str, e, tmp;
 	int errorOccurred;
 
 	PROTECT(e = allocVector(LANGSXP, 4));
@@ -1110,7 +1141,8 @@ R_curl_debug_callback (CURL *curl, curl_infotype type, char  *msg,  size_t len, 
 #endif
 	SETCAR(CDR(e), ScalarString(str));
 
-	SETCAR(CDR(CDR(e)), ScalarInteger(type));
+	SETCAR(CDR(CDR(e)), tmp = ScalarInteger(type));
+	SET_NAMES(tmp, mkString( CurlInfoTypeNames[type] ));
 
 	SETCAR(CDR(CDR(CDR(e))), makeCURLPointerRObject(curl, FALSE));
 

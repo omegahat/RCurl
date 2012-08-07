@@ -38,7 +38,7 @@ function(url, ..., curl = getCurlHandle())
 HEAD = httpHEAD =
 function(url, ..., curl = getCurlHandle())
 {
-  getURLContent(url, customrequest = "HEAD", ..., curl = curl)
+  getURLContent(url, customrequest = "HEAD", nobody = TRUE, ..., curl = curl)
 }
 
 httpOPTIONS =

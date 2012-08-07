@@ -11,9 +11,10 @@ function(id = 0)
 }  
 
 
-CurlFeatureBits = as.integer(2^(0:10))
+CurlFeatureBits = as.integer(2^(0:15))
 names(CurlFeatureBits) = c("ipv6", "kerberos4", "ssl", "libz", "ntlm", "gssnegotiate",
-                           "debug", "asynchdns", "spnego", "largefile")
+                           "debug", "asynchdns", "spnego", "largefile", "idn", "sspi",
+                           "conv", "curldebug", "tlsauth_srp", "ntlm_wb")
 class(CurlFeatureBits) = c("CurlFeatureBits", "BitIndicator")
 
 
