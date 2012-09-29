@@ -3,6 +3,8 @@
 \alias{httpPOST}
 \alias{httpGET}
 \alias{httpDELETE}
+\alias{httpHEAD}
+\alias{httpOPTIONS}
 \title{Simple high-level functions for HTTP PUT and DELETE}
 \description{
   These two functions are simple, high-level functions
@@ -18,6 +20,8 @@ httpPUT(url, content,  ..., curl = getCurlHandle())
 httpPOST(url, ..., curl = getCurlHandle())
 httpDELETE(url, ..., curl = getCurlHandle())
 httpGET(url, ..., curl = getCurlHandle())
+httpHEAD(url, ..., curl = getCurlHandle())
+httpOPTIONS(url, ..., curl = getCurlHandle())
 }
 \arguments{
   \item{url}{the URL of the server to which the HTTP request is to be

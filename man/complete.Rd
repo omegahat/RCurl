@@ -20,7 +20,8 @@ complete(obj, ...)
   \item{\dots}{additional arguments intended to be used by specific methods.}
 }
 \value{
-
+  The value is typically not of interest, but rather the side effect
+  of processing the pending requests.
 }
 \references{
  \url{http://curl.haxx.se}, specifically the multi interface of libcurl.

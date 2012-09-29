@@ -62,7 +62,7 @@ The actual constants are not exported, but are defined within
 the package. So we can use them with code such as 
 \code{RCurl:::CURLINFO_DATA_IN}.
 }
-\usage{}
-\value{}
+%\usage{}
+%\value{}
 \author{Duncan Temple Lang}
 \keyword{programming}

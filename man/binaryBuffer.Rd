@@ -34,8 +34,7 @@ binaryBuffer(initialSize = 5000)
      collecting the .
    }
 }
-\details{
-}
+
 \value{
   An object of class \code{RCurlBinaryBuffer} which is to be treated
   as an opaque data for the most part. When passing this as the value of

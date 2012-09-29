@@ -58,7 +58,5 @@ fileUpload(filename = character(), contents = character(), contentType = charact
 \seealso{
   \code{\link{postForm}}
 }
-\examples{
-
-}
+%\examples{}
 \keyword{IO}

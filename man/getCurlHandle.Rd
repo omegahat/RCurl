@@ -19,12 +19,13 @@
 \usage{
 getCurlHandle(..., .opts = NULL, .encoding = integer(), .defaults = getOption("RCurlOptions"))
 dupCurlHandle(curl, ..., .opts = NULL, .encoding = integer())
-getCurlMultiHandle()
+getCurlMultiHandle(..., .handles = list(...))
 }
 \arguments{
   \item{curl}{the existing curl handle that is to be duplicated}
   \item{...}{a named list of curl options to set after the handle has
-    been created.}
+    been created. For \code{getCurlMultiHandle}, these values are
+    invidivual curl handle objects, created via \code{getCurlHandle} or \code{dupCurlHandle}. }
   \item{.opts}{a named list or \code{CURLOptions} object identifying the
     curl options for the handle. These and the \code{...} arguments are
     used after the handle has been created.}
@@ -42,6 +43,8 @@ getCurlMultiHandle()
   \item{.defaults}{a collection of default values taken from R's
     global/session options. This is a parameter so that one can override
     it if necessary.}
+  \item{.handles}{a list of curl handle objects that are used as the
+    individual request handles within the multi-asynchronous requests}
 }
 \details{
   These functions create C-level data structures.

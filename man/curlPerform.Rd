@@ -56,8 +56,6 @@ curlMultiPerform(curl, multiple = TRUE)
     in subsequent uses of the curl handle (\code{curl}).
   }
 }
-\details{
-}
 \value{
   A integer value indicating the status of the request.
   This should be 0 as other errors will generate

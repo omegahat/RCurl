@@ -44,8 +44,7 @@ This is currently not vectorized.
 
 We might extend this to work with raw objects.
 }
-\seealso{
-}
+%\seealso{}
 \examples{
     # encode and then decode a simple string.
   txt = "Some simple text for base 64 to handle"

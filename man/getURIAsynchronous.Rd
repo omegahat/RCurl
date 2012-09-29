@@ -29,10 +29,10 @@
   with a value of \code{FALSE} for \code{async}.
 }
 \usage{
-getURIAsynchronous(url, ..., .opts = list(), write = multiTextGatherer(url),
+getURIAsynchronous(url, ..., .opts = list(), write = NULL,
                    curl = getCurlHandle(),
                     multiHandle = getCurlMultiHandle(), perform = Inf,
-                     .encoding = integer())
+                     .encoding = integer(), binary = rep(NA, length(url)))
 }
 \arguments{
   \item{url}{a character vector identifying the URIs to download.}
@@ -72,7 +72,9 @@ getURIAsynchronous(url, ..., .opts = list(), write = multiTextGatherer(url),
     the HTTP response to determine the encoding. This argument is used
     when such information is erroneous and the caller knows the correct
     encoding.
-  } 
+  }
+  \item{binary}{a logical vector identifying whether each URI has binary
+  content or simple text.}
 }
 \details{
   This uses \code{\link{curlMultiPerform}}

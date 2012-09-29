@@ -48,7 +48,6 @@ getBinaryURL(url, ..., .opts = list(), curl = getCurlHandle(), .buf = binaryBuff
 \value{
   A "raw" vector.
 }
-\references{}
 \author{Duncan Temple Lang}
 \seealso{
   \code{\link{getURL}}

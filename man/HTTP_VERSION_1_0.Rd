@@ -15,11 +15,8 @@ These are values that can be used to set the \code{http.version} and \code{sslve
 options of \code{\link{curlPerform}}.
 }
 \usage{HTTP_VERSION_1_0}
-\details{
-}
 \references{
  \url{http://curl.haxx.se/libcurl/c/curl_easy_setopt.html}
 }
-\examples{
-}
+%\examples{}
 \keyword{datasets}

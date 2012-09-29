@@ -109,9 +109,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
   \item{isHTTP}{a logical value that indicates whether the request an
   HTTP request. This is used when determining how to process the response.}
 }
-\details{
-
-}
+%\details{}
 \value{
   If no value is supplied for \code{write},
   the result is the text that is the HTTP response.

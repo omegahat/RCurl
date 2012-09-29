@@ -53,7 +53,7 @@
 \usage{
 basicTextGatherer(txt = character(), max = NA, value = NULL,
                     .mapUnicode = TRUE)
-multiTextGatherer(uris)
+multiTextGatherer(uris, binary = rep(NA, length(uris)))
 debugGatherer()
 }
 %- maybe also 'usage' for other objects documented here.
@@ -76,7 +76,8 @@ debugGatherer()
     read values from table in the text.}
   \item{.mapUnicode}{a logical value that controls whether the resulting
   text is processed to map components of the form \\uxxxx to their
-  appropriate Unicode representation.}  
+  appropriate Unicode representation.}
+ \item{binary}{a logical vector that indicates which URIs yield binary content}
 }
 \details{
   This is called when the libcurl engine finds sufficient

@@ -1,5 +1,6 @@
 \name{postForm}
 \alias{postForm}
+\alias{.postForm}
 \alias{getForm}
 \title{Submit an HTML form}
 \description{
@@ -15,6 +16,7 @@ postForm(uri, ..., .params = list(), .opts = curlOptions(url = uri),
          curl = getCurlHandle(), style = 'HTTPPOST',
           .encoding = integer(), binary = NA, .checkParams = TRUE,
           .contentEncodeFun = curlEscape)
+.postForm(curl, .opts, .params, style = 'HTTPPOST')
 getForm(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle(),
          .encoding = integer(), binary = NA, .checkParams = TRUE)
 }

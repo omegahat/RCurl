@@ -19,11 +19,7 @@
 \source{
   libcurl (see \url{http://curl.haxx.se})
 }
-\references{
-}
-\seealso{
-
-}
-\examples{
-}
+%\references{}
+%\seealso{}
+%\examples{}
 \keyword{datasets}

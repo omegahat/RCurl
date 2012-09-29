@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \alias{CFILE}
 \alias{CFILE-class}
+\alias{close,CFILE-method}
 \title{Create a C-level handle for a file}
 \description{
 This function and class allow us to work with C-level
@@ -10,7 +11,11 @@ The intent is to be able to pass these to \code{libcurl}
 as options so that it can read or write from or to the file.
 We can also do this with R connections and specify callback functions
 that manipulate these connections. But using
-the C-level FILE handle is likely to be significantly faster for large files.
+the C-level FILE handle is likely to be significantly faster for large
+files.
+
+ The \code{close} method allows us to explicitly flush and close the file
+ from within R.
 }
 \usage{
 CFILE(filename, mode = "r")

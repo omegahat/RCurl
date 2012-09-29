@@ -24,10 +24,7 @@
 \section{Extends}{
 Class \code{"oldClass"}, directly.
 }
-\section{Methods}{
-  \describe{
-  }
-}
+%\section{Methods}{  \describe{}}
 \references{
  \url{http://curl.haxx.se}, the libcurl web site.
 }
@@ -39,6 +36,5 @@ Class \code{"oldClass"}, directly.
   \code{\link{getCurlHandle}},
   \code{\link{MultiCURLHandle-class}}
 }
-\examples{
-}
+%\examples{}
 \keyword{classes}

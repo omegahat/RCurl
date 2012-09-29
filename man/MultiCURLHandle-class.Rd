@@ -59,7 +59,5 @@
   \code{\link{curlMultiPerform}}
   \code{\link{multiTextGatherer}}    
 }
-\examples{
-
-}
+%\examples{}
 \keyword{classes}

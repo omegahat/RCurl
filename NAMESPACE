@@ -1,6 +1,7 @@
 import(methods)
 
 export(getURL, getURI, postForm, getForm, getURLContent)
+export(.postForm)
 export(curlGlobalInit,curlVersion)
 export(curlOptions)
 export(getCurlInfoConstants, getCurlOptionsConstants, listCurlOptions)
