@@ -1,13 +1,13 @@
 # RCurl:::AUTH_BASIC | RCurl:::AUTH_DIGEST | RCurl:::AUTH_NTLM
 
-CURLAUTHValues = structure(c(-2147483648, -17, 8, -18, 32, 16, 1, 2, 4, 0), .Names = c("CURLAUTH_ONLY", 
+CURLAUTHValues = structure(c(-.Machine$integer.max, -17, 8, -18, 32, 16, 1, 2, 4, 0), .Names = c("CURLAUTH_ONLY", 
  "CURLAUTH_ANY", "CURLAUTH_NTLM", "CURLAUTH_ANYSAFE", "CURLAUTH_NTLM_WB", 
  "CURLAUTH_DIGEST_IE", "CURLAUTH_BASIC", "CURLAUTH_DIGEST", "CURLAUTH_GSSNEGOTIATE", 
  "CURLAUTH_NONE"))
 
 # BitwiseValue( )
 
-AUTH_ONLY <- CURLAUTH_ONLY <- BitwiseValue(-2147483648, 'CURLAUTH_ONLY', 'CURLAuth')
+AUTH_ONLY <- CURLAUTH_ONLY <- BitwiseValue(-.Machine$integer.max, 'CURLAUTH_ONLY', 'CURLAuth')
 AUTH_ANY <- CURLAUTH_ANY <- BitwiseValue(-17, 'CURLAUTH_ANY', 'CURLAuth')
 AUTH_NTLM <- CURLAUTH_NTLM <- BitwiseValue(8, 'CURLAUTH_NTLM', 'CURLAuth')
 AUTH_ANYSAFE <- CURLAUTH_ANYSAFE <- BitwiseValue(-18, 'CURLAUTH_ANYSAFE', 'CURLAuth')

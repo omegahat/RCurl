@@ -21,3 +21,4 @@ postFormEg.R
 manyConnections.R
 .*\.log
 .*\.aux
+.*~

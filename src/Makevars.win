@@ -4,6 +4,13 @@ DEFINES= -DHAVE_LIBIDN_FIELD=1 -DHAVE_CURLOPT_URL=1 -DHAVE_CURLINFO_EFFECTIVE_UR
 CURL_INCLUDE_DIR=-I${LIB_CURL}/include
 CURL_LIB_DIR=-L${LIB_CURL}/lib
 
-PKG_CPPFLAGS = -Wall ${CURL_INCLUDE_DIR} $(DEFINES)
-PKG_LIBS= ${CURL_LIB_DIR} -lcurldll -lws2_32
+PKG_CPPFLAGS = ${CURL_INCLUDE_DIR} $(DEFINES)
+#PKG_LIBS= ${CURL_LIB_DIR} -lcurldll -lws2_32
+
+ifeq "${R_ARCH}" "/x64"
+PKG_LIBS= -L${LIB_CURL}/bin -lcurl-4 -lws2_32
+else
+DEFINES += -DCURL_STATICLIB
+PKG_LIBS= -L${LIB_CURL}/lib -lcurl -lssh2 -lssl -lssl32 -leay32 -lidn -lz -lws2_32 -lwldap32
+endif
 

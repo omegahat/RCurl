@@ -130,7 +130,12 @@ function(uri, ...,
                   collapse = "&")
             
    } else
-     .params = lapply(.params, as, "character") # as.list(.params)
+     .params = lapply(.params,
+                       function(x)
+                         if(is.atomic(x))
+                              as.character(x)
+                         else
+                            x)
   
 
   if(length(.params) == 0) {
@@ -140,7 +145,7 @@ function(uri, ...,
   } else if(noCurlOptions && .checkParams)
     testCurlOptionsInFormParameters(.params)
   
-  status = .Call("R_post_form", curl, .opts, .params, TRUE, as.integer(style),  PACKAGE = "RCurl")
+#  status = .Call("R_post_form", curl, .opts, .params, TRUE, as.integer(style),  PACKAGE = "RCurl")
   status = .postForm(curl, .opts, .params, style)
 
   if(any(!isProtected)) {

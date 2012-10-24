@@ -51,9 +51,8 @@ int UTF8Encode2BytesUnicode( unsigned short input, char * s )
 }
 
 
-#define ASSERT(cond)  if(!(cond)) \ 
-       PROBLEM "overrunning buffers in mapString" \
-       ERROR;
+#define ASSERT(cond)  if(!(cond)) error("overrunning buffers in mapString"); 
+
 
 /* Convert a string with \unnnn elements to its Unicode form.
   s - the input string
