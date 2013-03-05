@@ -1,5 +1,5 @@
 Package: RCurl
-Version: 1.95-3
+Version: 1.95-4
 Title: General network (HTTP/FTP/...) client interface for R
 Author: Duncan Temple Lang
 SystemRequirements: libcurl (version 7.14.0 or higher) http://curl.haxx.se.

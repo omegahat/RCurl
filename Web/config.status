@@ -331,7 +331,7 @@ Copyright (C) 2006 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/Users/duncan/Projects/org/omegahat/R/RCurl/Web'
+ac_pwd='/Users/duncan/GitWorkingArea/RCurl/Web'
 srcdir='.'
 # If no file are specified by the user, then we need to provide default
 # value.  By we need to know if files were specified by the user.
@@ -503,9 +503,9 @@ s,@build_alias@,|#_!!_#|,g
 s,@host_alias@,|#_!!_#|,g
 s,@target_alias@,|#_!!_#|,g
 s,@PKG_NAME@,|#_!!_#|RCurl,g
-s,@VERSION@,|#_!!_#|1.91-0,g
-s,@TAR_FILE@,|#_!!_#|RCurl_1.91-0.tar.gz,g
-s,@DATE@,|#_!!_#|31 January 2012,g
+s,@VERSION@,|#_!!_#|1.95-4,g
+s,@TAR_FILE@,|#_!!_#|RCurl_1.95-4.tar.gz,g
+s,@DATE@,|#_!!_#|05 March 2013,g
 s,@LIBOBJS@,|#_!!_#|,g
 s,@LTLIBOBJS@,|#_!!_#|,g
 :end

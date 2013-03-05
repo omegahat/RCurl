@@ -141,7 +141,7 @@ function(url, ..., .opts = list(), write = basicTextGatherer(.mapUnicode = .mapU
   if(async) {
      if(missing(write))
         write = multiTextGatherer(url)
-     return(getURIAsynchronous(url, ..., .opts = .opts, write = write, curl = curl))
+     return(getURIAsynchronous(url, ..., .opts = .opts, write = write, curl = curl, .encoding = .encoding))
   }
 
   if(length(url) > 1) {
@@ -357,7 +357,7 @@ PercentCodes = c(
 	'}' = "%7D",  
         ' ' = '%20',
         '\r' = '%0D',
-        '\n' = '%OA')
+        '\n' = '%0A')
 
 curlPercentEncode =
 function(x, amp = TRUE, codes = PercentCodes, post.amp = FALSE)

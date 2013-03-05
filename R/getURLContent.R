@@ -10,6 +10,8 @@ function(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA, binary =
          header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding),
           isHTTP = length(grep('^[[:space:]]*http', url)) > 0)
 {
+  url = as(url, "character")
+  
   if(!missing(curl))
      curlSetOpt(.opts = .opts, curl = curl)
 

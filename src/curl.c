@@ -136,7 +136,7 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 	CURLcode status = 0;
 	CURLoption opt;
 
-	int i, n;
+	int i, n, isProtectedLength;
 	void *val;
 	SEXP el;
 	RWriteDataInfo *data;
@@ -147,6 +147,7 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 
         /* Find out how many options we are setting. */
 	n = GET_LENGTH(values);
+	isProtectedLength = GET_LENGTH(isProtected);
 
 	data = (RWriteDataInfo *) calloc(1, sizeof(RWriteDataInfo));
 	data->encoding = CE_LATIN1;
@@ -161,7 +162,7 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 		opt = INTEGER(opts)[i];
 		el = VECTOR_ELT(values, i);
   		   /* Turn the R value into something we can use in libcurl. */
-		val = getCurlPointerForData(el, opt, LOGICAL(isProtected)[ i % n ], obj);
+		val = getCurlPointerForData(el, opt, LOGICAL(isProtected)[ i % isProtectedLength ], obj);
 
                 if(opt == CURLOPT_WRITEFUNCTION && TYPEOF(el) == CLOSXP) {
 			data->fun = val; useData++;
@@ -1057,7 +1058,7 @@ R_call_R_write_function(SEXP fun, void *buffer, size_t size, size_t nmemb, RWrit
 void
 checkEncoding(char *buffer, size_t len, RWriteDataInfo *data)
 {
-	SEXP e, ns_env, ns_name, fun;
+	SEXP e, ns_env, ns_name;
 	int ans;
 	PROTECT(e = allocVector(LANGSXP, 2));
 #if 0

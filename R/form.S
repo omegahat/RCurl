@@ -22,7 +22,7 @@ function(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle()
   els = mapply(function(id, val) {
                               # turn name=c("a", "b") into
                               #  name=a&name=b
-                                paste(id, curlEscape(val), sep="=", collapse="&")
+                                paste(curlEscape(id), curlEscape(val), sep="=", collapse="&")
                }, names(.params), .params)
 
    args = paste(els, collapse = "&")
