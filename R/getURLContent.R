@@ -7,8 +7,8 @@ getURLContent =
   # but now we use the dynamic reader.
   #
 function(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA, binary = NA, .opts = list(...),
-         header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding),
-          isHTTP = length(grep('^[[:space:]]*http', url)) > 0)
+         header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding, .mapUnicode = .mapUnicode),
+          isHTTP = length(grep('^[[:space:]]*http', url)) > 0, .mapUnicode = TRUE)
 {
   url = as(url, "character")
   
@@ -17,7 +17,7 @@ function(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA, binary =
 
   if(is.logical(header)) {
      returnHeader = header
-     header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding)
+     header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding, .mapUnicode = .mapUnicode)
   } else
      returnHeader = FALSE
   

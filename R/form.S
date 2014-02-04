@@ -5,7 +5,7 @@ getForm =
   #
   #
 function(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle(),
-         .encoding = integer(), binary = NA, .checkParams = TRUE)  
+         .encoding = integer(), binary = NA, .checkParams = TRUE, .mapUnicode = TRUE)  
 {
     # should we merge params with ....
     # for now just one or the other.  
@@ -29,7 +29,7 @@ function(uri, ..., .params = character(), .opts = list(), curl = getCurlHandle()
 
    uri = paste(uri, args, sep = if(grepl("\\?", uri)) "&" else "?")
 
-   getURLContent(uri, .opts = .opts, .encoding = .encoding, binary = binary, curl = curl)
+   getURLContent(uri, .opts = .opts, .encoding = .encoding, binary = binary, curl = curl, .mapUnicode = .mapUnicode)
 }
 
 testCurlOptionsInFormParameters =
