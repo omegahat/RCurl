@@ -153,7 +153,7 @@ RCURL_CHECK_ENUM(CURLOPT_KEYPASSWD)
  RCURL_CHECK_ENUM(CURLOPT_SOCKOPTFUNCTION)
  RCURL_CHECK_ENUM(CURLOPT_SOCKOPTDATA)
  RCURL_CHECK_ENUM(CURLOPT_SSL_SESSIONID_CACHE)
-
+ RCURL_CHECK_ENUM(CURLOPT_GSSAPI_DELEGATION)
 
 dnl Next we determine if the Curl_base64_encode routine has an extra parameter
 dnl which appeared in curl-7.18.0 (approx?). This routine is not in the header

@@ -81,3 +81,6 @@ export(AUTH_ONLY, AUTH_ANY, AUTH_NTLM, AUTH_ANYSAFE, AUTH_NTLM_WB, AUTH_DIGEST_I
 export(clone)
 exportMethods(clone)
 export(getCurlErrorClassNames)
+
+
+export(isBinaryContent, isBinaryFile, guessMIMEType)
