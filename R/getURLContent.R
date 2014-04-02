@@ -17,7 +17,7 @@ function(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA, binary =
 
   if(is.logical(header)) {
      returnHeader = header
-     header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding)
+     header = dynCurlReader(curl, binary = binary, baseURL = url, isHTTP = isHTTP, encoding = .encoding, header = header)
   } else
      returnHeader = FALSE
   
@@ -127,9 +127,34 @@ function(header, full = FALSE)
 }
 
 # See http://www.iana.org/assignments/media-types/
-textContentTypes = c("html", "text", "xhtml", "plain", "xml", "x-latex", "css", "latex",
+textContentTypes = c("html", "text", "xhtml", "plain", "xml", "tex", "x-latex", "css", "latex", "x-texinfo",
                      "sgml", "postscript", "texinfo", "ecmascript", "javascript",
-                     "atom+xml", "json")
+                     "atom+xml", "json", "x-bsh", "x-sh", "x-shar","x-rtf", "base64", "x-tcl", "x-lisp", "x-java-source",
+                     "x-fortran", "x-script.csv", "x-csh", "x-c")
+
+if(FALSE) {
+   # see mime.R
+guessMIMEType =
+function(filename)
+{
+    ext = getExtension(filename)
+    data("mimeTypeExtensions", package = "RCurl", envir = environment())
+    mimeTypeExtensions[ext]
+}
+}
+
+
+isBinaryFile =
+function(name, mimeType = NA)
+{
+#      type = "application/binary"
+
+  if(is.na(mimeType)) 
+    mimeType  = guessMIMEType()
+
+  isBinaryContent( , mimeType)  
+}
+
 
 isBinaryContent =
   #
@@ -138,7 +163,7 @@ isBinaryContent =
   #  Each can be a vector.
   #
 function(header, type = getContentType(header)[1],
-          textTypes = getOption("text.content.types"))
+          textTypes = getOption("text.content.types", textContentTypes))
 {
    if(is.list(type) && length(type) > 1) {
      last <- TRUE
