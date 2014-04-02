@@ -813,6 +813,9 @@ getCurlPointerForData(SEXP el, CURLoption option, Rboolean isProtected, CURL *cu
 	    case INTSXP:
 		    ptr = (void *) malloc(sizeof(long));
 		    *( (long*) ptr) = (long) INTEGER(el)[0];
+  		        /* Don't allow TRUE or 1 for SSL_VERIFYHOST */
+		    if(option == CURLOPT_SSL_VERIFYHOST && INTEGER(el)[0] == 1)
+			*( (long*) ptr) = 2;
 	      break;
 	    case EXTPTRSXP:
 		    ptr = (void *) R_ExternalPtrAddr(el);
@@ -1103,7 +1106,7 @@ R_curl_write_data(void *buffer, size_t size, size_t nmemb, RWriteDataInfo *data)
 
 #include <Rversion.h>
 
-const char const *CurlInfoTypeNames[] =  {
+const char  * const CurlInfoTypeNames[] =  {
     "TEXT", "HEADER_IN", "HEADER_OUT",
     "DATA_IN", "DATA_OUT", "SSL_DATA_IN", "SSL_DATA_OUT", 
     "END"
