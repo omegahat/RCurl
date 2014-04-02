@@ -13,7 +13,7 @@ function(type, msg, asError = TRUE)
 
    fun = (if(asError) stop else warning)
 
-   fun( structure(list(message = msg, call = sys.call()), class = c(typeName, "GenericCurlError", "error", "condition")) )
+   fun( structure(list(message = msg, call = sys.call()), class = c(typeName, "GenericCurlError", if(asError) "error" else "warning", "condition")) )
 }
 
 

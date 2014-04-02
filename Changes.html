@@ -4,6 +4,19 @@
 </head>
 <body>
 
+<dl>
+  <dt>
+  <li> Finally fixed guessMIMEType() to use data() more appropriately.
+  <dd>
+  <dt>
+  <li> Force the value of the option ssl.verifyhost to 2 rather than 1
+       or TRUE, due to changes in libcurl (&gt;= 7.28.1)
+  <dd>
+  <dt>
+  <li> Added gssappi.delegation as a curl option.
+  <dd>
+</dl>
+
 <h2>1.95-4</h2>
 <dl>
   <dt>
@@ -1025,6 +1038,6 @@ getURL('https://sourceforge.net', ssl.verifypeer = FALSE)
 <address><a href="http://www.stat.ucdavis.edu/~duncan">Duncan Temple Lang</a>
 <a href=mailto:duncan@wald.ucdavis.edu>&lt;duncan@wald.ucdavis.edu&gt;</a></address>
 <!-- hhmts start -->
-Last modified: Tue Mar  5 10:55:53 PST 2013
+Last modified: Wed Apr  2 10:10:22 PDT 2014
 <!-- hhmts end -->
 </body> </html>
