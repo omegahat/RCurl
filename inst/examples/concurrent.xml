@@ -54,7 +54,7 @@ function(uris, ..., multiHandle = getCurlMultiHandle(), .perform = TRUE)
   }
 
   if(.perform) {
-     perform(multiHandle)
+     complete(multiHandle)
      lapply(content, function(x) x$value())
    } else {
      return(list(multiHandle = multiHandle, content = content))

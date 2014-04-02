@@ -4,8 +4,10 @@ dynCurlReader =
 # to harvest the body of the HTTP response.
 #
 function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verbose = FALSE,
-          binary = NA, baseURL = NA, isHTTP = NA, encoding = NA) 
+          binary = NA, baseURL = NA, isHTTP = NA, encoding = NA, header = FALSE) 
 {
+    returnHeader = header
+    
     header = character()    # for the header
     buf = NULL              # for a binary connection.
     content.type = character()
@@ -129,7 +131,11 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
                 ans = encode(ans)
                 if(length(content.type))
                       attr(ans, "Content-Type") = content.type
-                ans
+
+                if(returnHeader)
+                   list(header = header, body = ans)
+                else
+                   ans
              }
            else 
              function() {
@@ -139,7 +145,12 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
                         encode(txt)
                if(length(content.type))
                     attr(tmp, "Content-Type") = content.type               
-               value(tmp)
+               ans = value(tmp)
+
+               if(returnHeader)
+                   list(header = header, body = ans)
+               else
+                  ans
              }
 
     encode =
