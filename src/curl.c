@@ -3,7 +3,7 @@
 #include "Rversion.h"
 
 /* Not thread-safe, but okay for now. */
-static char RCurlErrorBuffer[1000] = "<not set>";
+static char RCurlErrorBuffer[1000] = "<error message in RCurl which has not been set>";
 
 #define R_CURL_CHECK_ERROR(status, handle) 	if(status != CURLE_OK) getCurlError(handle, 1, status);
 
