@@ -53,7 +53,7 @@
 \references{Curl homepage \url{http://curl.haxx.se}
   \url{http://www.omegahat.org/RCurl}
 }
-\author{Duncan Temple Lang <duncan@wald.ucdavis.edu>}
+\author{Duncan Temple Lang <duncan@r-project.org>}
 \seealso{
   \code{\link{getCurlMultiHandle}}
   \code{\link{curlMultiPerform}}

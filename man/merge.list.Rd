@@ -24,7 +24,7 @@ merge.list(x, y, ...)
   from y and then with those in x, overwriting if necessary.
 }
 \references{Curl homepage \url{http://curl.haxx.se}}
-\author{Duncan Temple Lang <duncan@wald.ucdavis.edu>}
+\author{Duncan Temple Lang <duncan@r-project.org>}
 
 \seealso{
 \code{\link[base]{merge}}}

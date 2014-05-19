@@ -44,7 +44,7 @@ curlPercentEncode(x, amp = TRUE, codes = PercentCodes, post.amp = FALSE)
   
   Percent encoding explained in \url{http://en.wikipedia.org/wiki/Percent-encoding}
 }
-\author{Duncan Temple Lang <duncan@wald.ucdavis.edu>}
+\author{Duncan Temple Lang <duncan@r-project.org>}
 
 \examples{
   curlEscape("http://www.abc.com?x=a is a sentence&a b=and another")
