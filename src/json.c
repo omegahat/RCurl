@@ -48,6 +48,8 @@ int UTF8Encode2BytesUnicode( unsigned short input, char * s )
 		s[ 2 ] = (MASKBYTE | ( input & MASKBITS ) );
 		return 3;
 	}
+
+	return(-1);
 }
 
 

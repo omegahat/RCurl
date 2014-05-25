@@ -1,6 +1,7 @@
-.onAttach =
-function(...)
- library(methods)
+if(FALSE) 
+  .onAttach =
+    function(...)
+       library(methods)
 
          
 

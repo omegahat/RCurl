@@ -5,6 +5,7 @@
 \alias{push}
 \alias{pop,MultiCURLHandle,CURLHandle-method}
 \alias{pop,MultiCURLHandle,character-method}
+\alias{pop,MultiCURLHandle,integer-method}
 \alias{push,MultiCURLHandle,CURLHandle-method}
 
 \title{Class "MultiCURLHandle" for asynchronous, concurrent HTTP requests}

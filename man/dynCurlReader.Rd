@@ -27,7 +27,7 @@
 \usage{
 dynCurlReader(curl = getCurlHandle(), txt = character(), max = NA,
               value = NULL, verbose = FALSE, binary = NA, baseURL = NA,
-              isHTTP = NA, encoding = NA)
+              isHTTP = NA, encoding = NA, header = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -68,6 +68,8 @@ dynCurlReader(curl = getCurlHandle(), txt = character(), max = NA,
  \item{encoding}{a string that allows the caller to specify and override
   the encoding of the result. This is used to convert text returned
   from the server.}
+ \item{header}{a logical value that controls whether the (parsed) 
+   header from the HTTP response is returned.}
 }
 \value{
   A list with 5 elements all of which are functions. These are

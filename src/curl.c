@@ -1263,9 +1263,8 @@ R_finalizeCurlHandle(SEXP h)
 
    if(curl) {
 #ifdef RCURL_DEBUG_MEMORY
-     fprintf(stderr, "Clearing %p\n", (void *)curl);fflush(stderr);  
+     REprintf("Clearing curl handle %p\n", (void *)curl);fflush(stderr);  
 #endif
-
      CURLOptionMemoryManager *mgr = RCurl_getMemoryManager(curl);
      curl_easy_cleanup(curl);
      RCurl_releaseManagerMemoryTickets(mgr); 
@@ -1279,17 +1278,20 @@ R_finalizeMultiCurlHandle(SEXP h)
 
    if(multi_handle) {
 #ifdef RCURL_DEBUG_MEMORY
-     fprintf(stderr, "Clearing %p\n", (void *)multi_handle);fflush(stderr);  
+     REprintf("Clearing multi-handle %p\n", (void *)multi_handle);fflush(stderr);  
 #endif
 
      CURLMsg *msg;
      int numMsgs = 1;
 
-     while (msg = curl_multi_info_read(multi_handle, &numMsgs)) {
+     while( (msg = curl_multi_info_read(multi_handle, &numMsgs)) ) {
        curl_multi_remove_handle(multi_handle, msg->easy_handle);
+#if 0
+/* This is problematic. These CURL handles may still be in use in R, i.e. reachable. So we cannot clean them.*/
        CURLOptionMemoryManager *mgr = RCurl_getMemoryManager(msg->easy_handle);
        curl_easy_cleanup(msg->easy_handle);
        RCurl_releaseManagerMemoryTickets(mgr); 
+#endif
      }
 	 
    curl_multi_cleanup(multi_handle);
@@ -1327,7 +1329,7 @@ makeCURLPointerRObject(CURL *obj, int addFinalizer)
 
 	if(addFinalizer) {
 #ifdef RCURL_DEBUG_MEMORY
-	    fprintf(stderr, "adding finalizer to curl object %p\n", obj);fflush(stderr);
+	    Rprintf("adding finalizer to curl object %p\n", obj);fflush(stderr);
 #endif
 	    R_RegisterCFinalizer(ref, R_finalizeCurlHandle);
 	}
@@ -1507,10 +1509,11 @@ R_check_bits(int *val, int *bits, int *ans, int *n)
 
 
 
+
 SEXP
 makeMultiCURLPointerRObject(CURLM *obj)
 {
-    SEXP ans, klass ref;
+    SEXP ans, klass, ref;
 
 	if(!obj) {
 		PROBLEM "NULL CURL handle being returned"
@@ -1522,7 +1525,8 @@ makeMultiCURLPointerRObject(CURLM *obj)
 	PROTECT(ans = NEW(klass));
 	PROTECT(ref = R_MakeExternalPtr((void *) obj, Rf_install("MultiCURLHandle"), R_NilValue));
 	
-    R_RegisterCFinalizer(ref, R_finalizeMultiCurlHandle);
+Rprintf("registered finalizer for multi %p\n", obj);
+	R_RegisterCFinalizer(ref, R_finalizeMultiCurlHandle);
 	ans = SET_SLOT(ans, Rf_install("ref"), ref);
 	
 	UNPROTECT(3);
@@ -1718,7 +1722,7 @@ SEXP
 R_global_releaseObject(SEXP obj)
 {
 #if RCURL_DEBUG_MEMORY
-    fprintf(stderr, "releasing %p\n", obj);
+    REprintf(stderr, "releasing %p\n", obj);
 #endif
     Rf_PrintValue(obj);
     R_ReleaseObject(obj);
