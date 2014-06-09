@@ -446,7 +446,7 @@ addFormElement(SEXP el, SEXP name, struct curl_httppost **post, struct curl_http
 	   type = CHAR(STRING_ELT(VECTOR_ELT(el, 2), 0));
 
 
-        if(GET_LENGTH(VECTOR_ELT(el, 1))) {
+        if(GET_LENGTH(VECTOR_ELT(el, 1))) {  /* the contents field */
 		const char *buf = CHAR(STRING_ELT(VECTOR_ELT(el, 1), 0));
 		if(type) 
   		   curl_formadd(post, last, 
@@ -1184,8 +1184,18 @@ R_curl_progress_callback (SEXP fun, double total, double now, double uploadTotal
 
 	ans = R_tryEval(e, R_GlobalEnv, &errorOccurred);
 
-	if(GET_LENGTH(ans) && TYPEOF(ans) == INTSXP) {
-	    status = INTEGER(ans)[0];
+	if(GET_LENGTH(ans) && (TYPEOF(ans) == INTSXP || TYPEOF(ans) == REALSXP || TYPEOF(ans) == LGLSXP)) {
+	    switch(TYPEOF(ans)) {
+	    case REALSXP:
+		status = (int) REAL(ans)[0];
+		break;
+	    case INTSXP:
+		status = (int) INTEGER(ans)[0];
+		break;
+	    case LGLSXP:
+		status = (int) LOGICAL(ans)[0];
+	    }
+//	    status = INTEGER(ans)[0];
 	}
 	else
 	    status = errorOccurred;
@@ -1702,3 +1712,13 @@ SEXP makeUTF8String(void *buffer, size_t len, cetype_t encoding)
 #endif
 }
 #endif
+
+
+int
+R_seek(void *instream, curl_off_t offset, int origin)
+{
+    int status;
+    status = fseek((FILE *) instream, (long int) offset, origin);
+    /* check status */
+    return(0);
+}
