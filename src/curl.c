@@ -31,6 +31,7 @@ typedef struct BufInfo {
 void * getCurlPointerForData(SEXP el, CURLoption option, Rboolean isProtected, CURL *handle);
 SEXP makeCURLcodeRObject(CURLcode val);
 CURL *getCURLPointerRObject(SEXP obj);
+CURLM *getCURLMPointerRObject(SEXP obj);
 SEXP makeCURLPointerRObject(CURL *obj, int addFinalizer);
 char *getCurlError(CURL *h, int throw, CURLcode status);
 SEXP RCreateNamesVec(const char * const *vals,  int n);
@@ -1240,6 +1241,31 @@ getCURLPointerRObject(SEXP obj)
 	return(handle);
 }
 
+CURLM *
+getCURLMPointerRObject(SEXP obj)
+{
+	CURLM *handle;
+	SEXP ref;
+	if(TYPEOF(obj) != EXTPTRSXP)
+   	   ref = GET_SLOT(obj, Rf_install("ref"));
+	else
+    	   ref = obj;
+
+	handle = (CURLM *) R_ExternalPtrAddr(ref);
+	if(!handle) {
+		PROBLEM "Stale CURLM handle being passed to libcurl"
+		ERROR;
+	}
+
+	if(R_ExternalPtrTag(ref) != Rf_install("MultiCURLHandle")) {
+		PROBLEM "External pointer with wrong tag passed to libcurl. Was %s",
+                        CHAR(PRINTNAME(R_ExternalPtrTag(ref)))
+		ERROR;
+	}
+
+	return(handle);
+}
+
 static void
 R_finalizeCurlHandle(SEXP h)
 {
@@ -1247,12 +1273,38 @@ R_finalizeCurlHandle(SEXP h)
 
    if(curl) {
 #ifdef RCURL_DEBUG_MEMORY
-     fprintf(stderr, "Clearing %p\n", (void *)curl);fflush(stderr);  
+     REprintf("Clearing curl handle %p\n", (void *)curl);fflush(stderr);  
 #endif
-
      CURLOptionMemoryManager *mgr = RCurl_getMemoryManager(curl);
      curl_easy_cleanup(curl);
      RCurl_releaseManagerMemoryTickets(mgr); 
+   }
+}
+
+static void
+R_finalizeMultiCurlHandle(SEXP h)
+{
+   CURLM *multi_handle = getCURLMPointerRObject(h);
+
+   if(multi_handle) {
+#ifdef RCURL_DEBUG_MEMORY
+     REprintf("Clearing multi-handle %p\n", (void *)multi_handle);fflush(stderr);  
+#endif
+
+     CURLMsg *msg;
+     int numMsgs = 1;
+
+     while( (msg = curl_multi_info_read(multi_handle, &numMsgs)) ) {
+       curl_multi_remove_handle(multi_handle, msg->easy_handle);
+#if 0
+/* This is problematic. These CURL handles may still be in use in R, i.e. reachable. So we cannot clean them.*/
+       CURLOptionMemoryManager *mgr = RCurl_getMemoryManager(msg->easy_handle);
+       curl_easy_cleanup(msg->easy_handle);
+       RCurl_releaseManagerMemoryTickets(mgr); 
+#endif
+     }
+	 
+   curl_multi_cleanup(multi_handle);
    }
 }
 
@@ -1287,7 +1339,7 @@ makeCURLPointerRObject(CURL *obj, int addFinalizer)
 
 	if(addFinalizer) {
 #ifdef RCURL_DEBUG_MEMORY
-	    fprintf(stderr, "adding finalizer to curl object %p\n", obj);fflush(stderr);
+	    Rprintf("adding finalizer to curl object %p\n", obj);fflush(stderr);
 #endif
 	    R_RegisterCFinalizer(ref, R_finalizeCurlHandle);
 	}
@@ -1467,10 +1519,11 @@ R_check_bits(int *val, int *bits, int *ans, int *n)
 
 
 
+
 SEXP
 makeMultiCURLPointerRObject(CURLM *obj)
 {
-    SEXP ans, klass;
+    SEXP ans, klass, ref;
 
 	if(!obj) {
 		PROBLEM "NULL CURL handle being returned"
@@ -1480,10 +1533,12 @@ makeMultiCURLPointerRObject(CURLM *obj)
 	
 	PROTECT(klass = MAKE_CLASS("MultiCURLHandle"));
 	PROTECT(ans = NEW(klass));
-	PROTECT(ans = SET_SLOT(ans, Rf_install("ref"), 
-                                R_MakeExternalPtr((void *) obj, Rf_install("MultiCURLHandle"), R_NilValue)));
-
-	/*XXX R_RegisterCFinalizer(ans, R_finalizeMultiCurlHandle); */
+	PROTECT(ref = R_MakeExternalPtr((void *) obj, Rf_install("MultiCURLHandle"), R_NilValue));
+	
+Rprintf("registered finalizer for multi %p\n", obj);
+	R_RegisterCFinalizer(ref, R_finalizeMultiCurlHandle);
+	ans = SET_SLOT(ans, Rf_install("ref"), ref);
+	
 	UNPROTECT(3);
 
 	return(ans);
@@ -1677,7 +1732,7 @@ SEXP
 R_global_releaseObject(SEXP obj)
 {
 #if RCURL_DEBUG_MEMORY
-    fprintf(stderr, "releasing %p\n", obj);
+    REprintf(stderr, "releasing %p\n", obj);
 #endif
     Rf_PrintValue(obj);
     R_ReleaseObject(obj);

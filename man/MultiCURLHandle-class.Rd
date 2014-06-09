@@ -5,6 +5,7 @@
 \alias{push}
 \alias{pop,MultiCURLHandle,CURLHandle-method}
 \alias{pop,MultiCURLHandle,character-method}
+\alias{pop,MultiCURLHandle,integer-method}
 \alias{push,MultiCURLHandle,CURLHandle-method}
 
 \title{Class "MultiCURLHandle" for asynchronous, concurrent HTTP requests}
@@ -53,7 +54,7 @@
 \references{Curl homepage \url{http://curl.haxx.se}
   \url{http://www.omegahat.org/RCurl}
 }
-\author{Duncan Temple Lang <duncan@wald.ucdavis.edu>}
+\author{Duncan Temple Lang <duncan@r-project.org>}
 \seealso{
   \code{\link{getCurlMultiHandle}}
   \code{\link{curlMultiPerform}}

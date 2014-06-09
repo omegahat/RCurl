@@ -18,7 +18,7 @@ function(url, ..., .opts = list(), write = NULL, curl = getCurlHandle(),
   writeSupplied = !missing(write)
   
   if(!is.null(write) && !is.list(write)) 
-     write = replicate(length(url), write)
+     write = replicate(length(url), write) 
 
 
   if(length(url) > 1) 
@@ -75,12 +75,17 @@ function(url, ..., .opts = list(), write = NULL, curl = getCurlHandle(),
 
 setGeneric("complete", function(obj, ...) standardGeneric("complete"))
 setMethod("complete", "MultiCURLHandle",
-               function(obj, ...) {
+               function(obj, pop = TRUE, ...) {
                   while(TRUE) {
+#XXX need to return the updated obj with an curl handles popped.
                      status = curlMultiPerform(obj)
                      if(status[2] == 0)
                        break
                   }
+                  if(pop)
+                    obj@subhandles = list()
+                  
+                  obj
                })
   
 
@@ -109,14 +114,19 @@ function(..., .handles = list(...))
 
 
 setGeneric("push", function(obj, val, id = character()) standardGeneric("push"))
-setGeneric("pop", function(obj, val) standardGeneric("pop"))
+setGeneric("pop", function(obj, val, ...) standardGeneric("pop"))
 
 
 
 setMethod("push", c("MultiCURLHandle", "CURLHandle"),
                function(obj, val, id = character()) {
                  .Call("R_pushCurlMultiHandle", obj, val, PACKAGE = "RCurl")
-                  # Should check id is not a number. That should not be allowed.
+                 
+                 if(length(id) == 1 && is.na(id))
+                   return(obj)
+
+                  # Should check id is not a number. That should not be allowed.                 
+                 
                  if(length(id) == 0)
                    id = length(obj@subhandles) + 1
                  else
@@ -128,18 +138,47 @@ setMethod("push", c("MultiCURLHandle", "CURLHandle"),
 
 
 setMethod("pop", c("MultiCURLHandle", "CURLHandle"),
-               function(obj, val) {
-                 .Call("R_popCurlMultiHandle", obj, val, PACKAGE = "RCurl")
-                 obj
+               function(obj, val, ...) {
+                 i = whichCurl(val, obj@subhandles)
+                 pop(obj, i)
+#                 .Call("R_popCurlMultiHandle", obj, val, PACKAGE = "RCurl")
+#                 obj
                })
 
+whichCurl =
+function(h, els)
+{
+  if(length(els) == 0)
+    stop("Cannot match handle to elements in empty list")
+  
+  i = sapply(els, identical, h)
+  which(i)
+}
 
+tmp = 
 setMethod("pop", c("MultiCURLHandle", "character"),
-               function(obj, val) {
+          function(obj, val, ...) {
                  if(!length(names(obj@subhandles)) || !(val %in% names(obj@subhandles)))
                    stop("No such element in the collection of sub-handles")
                    
                  .Call("R_popCurlMultiHandle", obj, obj@subhandles[[val]], PACKAGE = "RCurl")
+                 
+                  i = match(val, names(obj@subhandles))
+                 
+                  obj@subhandles = obj@subhandles[ - i]
+                 
+                 obj
+               })
+
+setMethod("pop", c("MultiCURLHandle", "integer"),
+          function(obj, val, ...) {
+                 if(is.na(val) || val < 1 || val > length(obj@subhandles))
+                   stop("incorrect index for curl handle in multi handle")
+                   
+                 .Call("R_popCurlMultiHandle", obj, obj@subhandles[[val]], PACKAGE = "RCurl")
+
+                 obj@subhandles = obj@subhandles[ - val]
+                 
                  obj
                })
 

@@ -381,7 +381,7 @@ esc =
   #
   # An alternative approach.
   #
-function(x, codes = RCurl:::PercentCodes)
+function(x, codes = PercentCodes)
 {
   els = strsplit(x, "")[[1]]
   i =  match(els, names(codes), 0L)
