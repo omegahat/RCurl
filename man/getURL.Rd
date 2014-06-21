@@ -184,8 +184,9 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
     # status line)
   if(omegahatExists) {
      h = basicTextGatherer()
-     txt = getURL("http://www.omegahat.org/RCurl/index.html", header= TRUE, headerfunction = h$update, 
-                   httpheader = c(Accept="text/html", Test=1), verbose = TRUE) 
+     txt = getURL("http://www.omegahat.org/RCurl/index.html",
+                  header= TRUE, headerfunction = h$update, 
+                  httpheader = c(Accept="text/html", Test=1), verbose = TRUE) 
      print(paste(h$value(NULL)[-1], collapse=""))
      read.dcf(textConnection(paste(h$value(NULL)[-1], collapse="")))
   }
@@ -247,7 +248,8 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
 
   # Example
   if(interactive() && omegahatExists) {
-     uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.xml")
+     uris = c("http://www.omegahat.org/RCurl/index.html",
+              "http://www.omegahat.org/RCurl/philosophy.xml")
      txt = getURI(uris)
      names(txt)
      nchar(txt)

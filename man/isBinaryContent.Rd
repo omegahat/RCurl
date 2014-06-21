@@ -9,7 +9,8 @@
   when processing low-level HTTP responses.
 }
 \usage{
-isBinaryContent(header, type = getContentType(header)[1], textTypes = getOption("text.content.types", textContentTypes))
+isBinaryContent(header, type = getContentType(header)[1],
+                textTypes = getOption("text.content.types", textContentTypes))
 }
 \arguments{
   \item{header}{the header from the HTTP response which delivered the content}

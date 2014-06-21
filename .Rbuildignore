@@ -24,3 +24,16 @@ manyConnections.R
 .*~
 .git*
 asynchHeaders.R
+^post.R
+^postForm.html
+^testCFile.R
+cleanup-mine
+dynGC.R
+^encoding.R
+exampleCode
+^cacert.pem
+brazilEcon.R
+^blockUpload.R
+^CodeGeneration/.*.tu$
+^CodeGeneration/.*.o
+^CodeGeneration/.*.so

@@ -100,7 +100,8 @@ dynCurlReader(curl = getCurlHandle(), txt = character(), max = NA,
    # These are here just to illustrate the dynamic reader.
 if(url.exists("http://www.omegahat.org/Rcartogram/demo.jpg")) {
   header = dynCurlReader()
-  curlPerform(url = "http://www.omegahat.org/Rcartogram/demo.jpg", headerfunction = header$update, curl = header$curl())
+  curlPerform(url = "http://www.omegahat.org/Rcartogram/demo.jpg",
+              headerfunction = header$update, curl = header$curl())
   class( header$value() )
   length( header$value() )
 }
@@ -108,7 +109,8 @@ if(url.exists("http://www.omegahat.org/Rcartogram/demo.jpg")) {
 if(url.exists("http://www.omegahat.org/dd.gz")) {
      # gzip example.
   header = dynCurlReader()
-  curlPerform(url = "http://www.omegahat.org/dd.gz", headerfunction = header$update, curl = header$curl())
+  curlPerform(url = "http://www.omegahat.org/dd.gz",
+              headerfunction = header$update, curl = header$curl())
   class( header$value() )
   length( header$value() )
 

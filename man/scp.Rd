@@ -54,8 +54,11 @@ Duncan Temple Lang
 }
 \examples{
 \dontrun{
-   x = scp("eeyore.ucdavis.edu", "/home/duncan/OmegaWeb/index.html",  "My.SCP.Passphrase", binary = FALSE)
-   x = scp("eeyore.ucdavis.edu",  "/home/duncan/OmegaWeb/RCurl/xmlParse.bz2",  "My.SCP.Passphrase")
+   x = scp("eeyore.ucdavis.edu", "/home/duncan/OmegaWeb/index.html",
+            "My.SCP.Passphrase", binary = FALSE)
+   x = scp("eeyore.ucdavis.edu",
+  "/home/duncan/OmegaWeb/RCurl/xmlParse.bz2", 
+            "My.SCP.Passphrase")
    if(require(Rcompression))
       o = bunzip2(x)
 }

@@ -16,7 +16,8 @@
  This function can handle binary or text content.
 }
 \usage{
-ftpUpload(what, to, asText = inherits(what, "AsIs") || is.raw(what), ..., curl = getCurlHandle())
+ftpUpload(what, to, asText = inherits(what, "AsIs") || is.raw(what),
+           ..., curl = getCurlHandle())
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

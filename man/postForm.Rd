@@ -100,16 +100,19 @@ if(url.exists("http://www.google.com")) {
   getURL("http://www.google.com/search?hl=en&lr=&ie=ISO-8859-1&q=RCurl&btnG=Search")
 
    # Here we let getForm do the hard work of combining the names and values.
-  getForm("http://www.google.com/search", hl="en", lr="", ie="ISO-8859-1",  q="RCurl", btnG="Search")
+  getForm("http://www.google.com/search",
+           hl="en", lr="", ie="ISO-8859-1",  q="RCurl", btnG="Search")
 
    # And here if we already have the parameters as a list/vector.
-  getForm("http://www.google.com/search", .params = c(hl="en", lr="", ie="ISO-8859-1",  q="RCurl", btnG="Search"))
+  getForm("http://www.google.com/search",
+           .params = c(hl="en", lr="", ie="ISO-8859-1",  q="RCurl", btnG="Search"))
 }
 
 
    # Now looking at POST method for forms.
-if(url.exists("http://wwwx.cs.unc.edu/~jbs/aw-wwwp/docs/resources/perl/perl-cgi/programs/cgi_stdin.cgi")) 
- postForm("http://wwwx.cs.unc.edu/~jbs/aw-wwwp/docs/resources/perl/perl-cgi/programs/cgi_stdin.cgi",
+u = "http://wwwx.cs.unc.edu/~jbs/aw-wwwp/docs/resources/perl/perl-cgi/programs/cgi_stdin.cgi"
+if(url.exists(u)) 
+ postForm(u,
            name = "Bob", "checkedbox" = "spinich",
            submitButton = "Now!",
            textarea = "Some text to send",

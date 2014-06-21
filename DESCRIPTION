@@ -19,14 +19,10 @@ Depends: R (>= 2.7.0)
 Imports: methods, bitops
 Suggests: Rcompression, XML
 URL: http://www.omegahat.org/RCurl
-Limitations: 
-       One doesn't yet have full control over the contents of a POST form such as specifying
-       files, content type.
-       Error handling uses a single global variable at present.
 Note:  This will be used generally to communicate with HTTP servers and specifically
        in the SOAP package, HTML forms and for accessing data on Web sites that require
        more state information than simply URL access (e.g. cookies).
-Check:  To run R CMD check, one really needs network access. It is an HTTP client!
+Note:  To run R CMD check, one really needs network access. It is an HTTP client!
         This can be problematic as a Web site may be down when you run
         but the real tests are important.
 Collate:     aclassesEnums.R

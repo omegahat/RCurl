@@ -14,6 +14,7 @@ typedef wchar_t ucs_t;
 typedef unsigned int ucs_t;
 # define WC_NOT_UNICODE 
 
+#if 0  
 static int mbcs_get_next2(int c, ucs_t *wc)
 {
 #if 0
@@ -65,7 +66,10 @@ static int mbcs_get_next2(int c, ucs_t *wc)
     return(0);
 #endif
  }
+#endif  // mbcs_get_next2
+
 #endif
+
 
 #define CTEXT_PUSH(c) do { \
 	if (ct - currtext >= 1000) {memmove(currtext, currtext+100, 901); memmove(currtext, "... ", 4); ct -= 100;} \
@@ -96,9 +100,10 @@ static int mbcs_get_next2(int c, ucs_t *wc)
 
 
 
+#ifdef CHECKING_IF_WE_NEED_THESE
+
 SEXP StringValue(void *input, int len)
 {
-    Rboolean mbcslocale = TRUE;
     SEXP yylval = R_NilValue;
     int pos = 0;
     int c = xxgetc();
@@ -298,3 +303,5 @@ R_checkStringValue()
     str[5] = '5';
     return(StringValue(str, 6));
 }
+
+#endif // CHECKING_IF_WE_NEED_THESE

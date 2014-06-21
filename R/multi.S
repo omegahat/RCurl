@@ -17,6 +17,11 @@ function(url, ..., .opts = list(), write = NULL, curl = getCurlHandle(),
 {
   writeSupplied = !missing(write)
   
+  if(length(list(...))) {
+      tmp = list(...)
+      .opts[names(tmp)] = tmp
+  }
+       
   if(!is.null(write) && !is.list(write)) 
      write = replicate(length(url), write) 
 
@@ -49,7 +54,7 @@ function(url, ..., .opts = list(), write = NULL, curl = getCurlHandle(),
     else
          .opts[["writefunction"]] = w
 
-    opts = curlOptions(URL = url[i], ..., .opts = .opts)
+    opts = curlOptions(URL = url[i], .opts = .opts)
     curlSetOpt(.opts = opts, curl = curl[[i]], .encoding = if(length(.encoding)) .encoding[i] else integer())
   
     multiHandle = push(multiHandle, curl[[i]])

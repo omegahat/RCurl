@@ -17,7 +17,8 @@
   and again, should be treated as an opaque data type.
 }
 \usage{
-getCurlHandle(..., .opts = NULL, .encoding = integer(), .defaults = getOption("RCurlOptions"))
+getCurlHandle(..., .opts = NULL, .encoding = integer(),
+               .defaults = getOption("RCurlOptions"))
 dupCurlHandle(curl, ..., .opts = NULL, .encoding = integer())
 getCurlMultiHandle(..., .handles = list(...))
 }

@@ -17,7 +17,8 @@
   
 }
 \usage{
-getBinaryURL(url, ..., .opts = list(), curl = getCurlHandle(), .buf = binaryBuffer(.len), .len = 5000)
+getBinaryURL(url, ..., .opts = list(), curl = getCurlHandle(),
+             .buf = binaryBuffer(.len), .len = 5000)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

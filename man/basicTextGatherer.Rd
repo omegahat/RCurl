@@ -140,7 +140,8 @@ if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
 
 
   headers = basicTextGatherer()
-  txt = getURL("http://www.omegahat.org/RCurl/index.html", header = TRUE, headerfunction = headers$update)
+  txt = getURL("http://www.omegahat.org/RCurl/index.html",
+               header = TRUE, headerfunction = headers$update)
 
      # Now read the headers.
   headers$value()
@@ -154,7 +155,8 @@ if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
   d$value()[["headerIn"]]
 
 
-  uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.html")
+  uris = c("http://www.omegahat.org/RCurl/index.html",
+           "http://www.omegahat.org/RCurl/philosophy.html")
   g = multiTextGatherer(uris)
   txt = getURIAsynchronous(uris,  write = g)
   names(txt)
@@ -171,7 +173,8 @@ if(url.exists("http://www.omegahat.org/RCurl/index.html")) {
 \dontrun{
  Sys.setlocale(,"en_US.latin1")
  Sys.setlocale(,"en_US.UTF-8")
- uris = c("http://www.omegahat.org/RCurl/index.html", "http://www.omegahat.org/RCurl/philosophy.html")
+ uris = c("http://www.omegahat.org/RCurl/index.html",
+          "http://www.omegahat.org/RCurl/philosophy.html")
  g = multiTextGatherer(uris)
  txt = getURIAsynchronous(uris,  write = g)
 }

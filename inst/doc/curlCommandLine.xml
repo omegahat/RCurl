@@ -1,0 +1,212 @@
+<section
+	 xmlns:r="http://www.r-project.org"
+	 xmlns:curl="http://curl.haxx.se"
+	 xmlns:omg="http://www.omegahat.org"
+	 xmlns:sh="http://www.shell.org"
+         xmlns:http="http://www.w3.org/Protocols">
+<title>Curl Command Line Arguments and <omg:pkg>RCurl</omg:pkg></title>
+<!-- see http://curl.haxx.se/docs/httpscripting.html  for examples -->
+
+
+<para>
+We mentioned the command-line program <sh:app>curl</sh:app> at the
+beginning of this chapter.  <sh:app>curl</sh:app> is based on
+<libcurl/> so it provides ways to use many of <libcurl/>'s
+facilities via command-line flags and arguments.  We can set options
+such as the User-Agent or the <curl:opt>netrc.file</curl:opt> and
+specify files and other inputs for Web requests on the command line.
+Since <omg:pkg>RCurl</omg:pkg> and <sh:app>curl</sh:app> share the
+same underlying software (<libcurl/>), they both can access many of
+the same features.  There are many examples on the Web of using
+<sh:app>curl</sh:app> for making <http/> requests so sometimes it
+can be useful to understand how to translate those to <r/> commands
+using <omg:pkg>RCurl</omg:pkg> functions.  In this section, we will look
+at some examples and show the <sh:app>curl</sh:app> shell command and
+the equivalent <r/> command.
+</para>
+<para>
+Many of the <sh:app>curl</sh:app> command-line flags
+have two forms <dash/> the longer, but  more suggestive name
+such as <sh:flag>--user-agent</sh:flag> and the simpler
+to type <sh:flag>-A</sh:flag>. 
+The longer forms correspond reasonably closely to the names
+of the curl options in <omg:pkg>RCurl</omg:pkg>. 
+When translating a shell command  invoking curl,
+it is good practice to consult the help page for curl
+and map the short forms of the command line options to their longer counterpart,
+at least mentally, and then map them to the corresponding <omg:pkg>RCurl</omg:pkg> option names.
+</para>
+
+<para>
+<duncan status="test">We seem to want to use PUT, but use POST. We don't use the up variable.</duncan>
+For example, we can upload the contents of a file to a <url/> using
+<sh:app>curl</sh:app> with a command such as
+<programlisting contentType="shell"><![CDATA[
+curl -T filename -X PUT url
+]]></programlisting>
+The <sh:flag>-X</sh:flag> identifies the type of <http/> request.
+The <sh:flag>-T</sh:flag> flag specifies the file whose contents
+we want to send.
+We can do this in <r/>, with 
+<r:code>
+up = fileUpload(filename)
+httpPUT(url, upload = TRUE, 
+         readdata = CFILE(filename)@ref,
+         infilesize = file.info(filename)[1, "size"])
+</r:code>
+</para>
+
+<example>
+<title>Comparing Command Line and <omg:pkg>RCurl</omg:pkg> Requests for GlobalGiving</title>
+<invisible>
+<r:code>
+uGG = "https://api.globalgiving.org/api/public/projectservice/all/projects/ids"
+</r:code>
+</invisible>
+<para sloppy="true"><!-- http://www.globalgiving.org/to-go/curl-example.html -->
+As another example, we send a request to a <rest/> API provided by
+GlobalGiving <citation><biblioref linkend="bib:GlobalGiving"/></citation>
+at <ulink url="www.globalgiving.org"/>.  It
+explicitly sets two <http/> header fields <dash/>
+<http:headerFieldName>Accept</http:headerFieldName> and
+<http:headerFieldName>Content-Type</http:headerFieldName>.  We will also
+set the <http:headerFieldName>User-Agent</http:headerFieldName> field. 
+The command is 
+<programlisting contentType="shell"><![CDATA[
+curl -H "Accept: application/xml" 
+   -H "Content-Type: application/xml" 
+   -A 'curl' -X GET 
+   url
+]]></programlisting>
+where <literal>url</literal> is 
+<ulink url="https://api.globalgiving.org/api/public/projectservice/all/projects/ids?api_key=YOUR_API_KEY"/>
+and you insert the appropriate key.
+With <omg:pkg>RCurl</omg:pkg>, we can use <r:func>getForm</r:func> and
+pass the <url/> and parameter(s) as separate arguments rather than
+having to paste our key to the <url/>. We do this with <r:var>uGG</r:var> as 
+<ulink url="https://api.globalgiving.org/api/public/projectservice/all/projects/ids"/> and 
+<r:code>
+getForm(uGG, api_key = key, useragent = "RCurl",
+        httpheader = 
+          c(Accept = "application/xml",
+            "Content-Type" = "application/xml" ))
+</r:code>
+The <sh:flag>-A</sh:flag> in <sh:app>curl</sh:app> corresponds to 
+the <curl:opt>useragent</curl:opt>  option in <omg:pkg>RCurl</omg:pkg>
+and the two <sh:flag>-H</sh:flag> arguments
+are combined into a vector in <r/> and set via the <curl:opt>httpheader</curl:opt> option.
+</para>
+</example>
+
+<example><title>Posting a Tweet with a <sh:app>curl</sh:app> Command vs. <r:func>httpPOST</r:func>  </title>
+<para>
+We can post tweets programmatically via a <http:post/> request.
+Twitter <citation><biblioref linkend="bib:Twitter"/></citation>
+provides a Web interface to show you what the request would be as a
+<sh:app>curl</sh:app> command. (See <ulink
+url="https://dev.twitter.com/apps"/> and the <literal>OAuth</literal> tab for your
+particular application.) For example, we post the tweet <literal>"Here
+it is"</literal> with
+<sh:code>
+curl --request 'POST' 
+    'https://api.twitter.com/1/statuses/update' 
+    --data 'Here_it_is=' 
+    --header 'Authorization: OAuth 
+                 oauth_consumer_key=xx, 
+                 oauth_nonce=45b55,  
+                 oauth_signature_method=HMAC-SHA1, 
+                 oauth_token=xxxx' 
+    --verbose
+</sh:code>
+With <omg:pkg>RCurl</omg:pkg>, we can use
+<r:code>
+uT = 'https://api.twitter.com/1/statuses/update'
+httpPOST(uT, postfields = "Here it is",
+         httpheader = 
+           c(Authorization = 
+               'OAuth oauth_consumer_key=xx, 
+             oauth_nonce=45b55,
+             oauth_signature_method=HMAC-SHA1, 
+             oauth_token=xxxx' ),
+          verbose = TRUE
+         )
+</r:code>
+Note that <omg:pkg>RCurl</omg:pkg> encodes the text (<literal>"Here it is"</literal>) for us.<check/>
+</para>
+<para>
+The <sh:flag>--request</sh:flag> flag is the same as the shorter <sh:flag>-X</sh:flag>
+flag for identifying the method of the request, e.g., <http:post/> or <http:put/>.
+</para>
+
+</example>
+
+<para>
+One of the benefits of <omg:pkg>RCurl</omg:pkg> relative to <sh:app>curl</sh:app>
+is that we are working in <r/> rather than the shell.
+This means we have a more flexible programming language and richer data structures.
+This makes it easier to do computations before and after the Web requests,
+that is we can can create the inputs from other computations, with data
+in <r/>.  
+We can also use the same curl handle across requests which 
+makes it easier to manage state and content (e.g., cookies)
+across the requests.
+</para>
+
+
+<example>
+<title></title>
+<para>
+<r:code>
+curl -H "Content-Type: application/xml" -u admin:district -d @categoryCombos.xml "http://localhost:8081/master/api/metaData" -X POST -v
+</r:code>
+</para>
+
+<para>
+The <sh:flag>-H</sh:flag> corresponds to the <r:arg>httpheader</r:arg> option in a call to any of the
+<omg:pkg>RCurl</omg:pkg> functions.
+<r:code>
+ httpheader = c("Content-Type" = "application/xml")
+</r:code>
+</para>
+<para>
+The <sh:flag>-u</sh:flag> corresponds to <r:arg>userpwd</r:arg>, i.e.
+<r:code>
+ userpwd = "admin:district"
+</r:code>
+</para>
+<para>
+The <sh:flag>-X</sh:flag> corresponds to either
+<r:code>
+  customrequest = "POST"
+</r:code>
+or alternatively using the 
+<r:func>httpPOST</r:func> function directly.
+</para>
+<para>
+The <sh:flag>-v</sh:flag> is for <r:arg>verbose</r:arg>.
+</para>
+<para>
+The most complicated or least obvious flag in this this command line is <sh:flag>-d</sh:flag>.
+This identifies the data to send as the body of the <http:op>POST</http:op> request.
+The @ sign tells <sh:exec>curl</sh:exec> that the argument is the name of a file
+and to use the contents of that file to get the actual content of the request's body.
+<r:func>RCurl</r:func> allows us to do deal with this in several ways.
+We can read the contents of the file ourselves in <r/> and pass that as the body of the 
+request using <r:arg>postfields</r:arg>, as in the twitter update example.
+Alternatively, we can use <r:arg>readdata</r:arg> as in the example above.
+</para>
+<para>
+So we can implement this with
+<r:code>
+httpPOST("http://localhost:8081/master/api/metaData",
+           verbose = TRUE, 
+           httpheader = c("Content-Type" = "application/xml"),
+           userpwd = "admin:district",
+           postfields = paste(readLines("categoryCombos.xml"), collapse = "\n"))
+</r:code>
+</para>
+
+
+</example>
+
+</section>
