@@ -22,7 +22,7 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
 
         if(verbose)
            cat("inBody? ", inBody, ", num bytes", nchar(str, "bytes"), "\n", sep = "")
-   
+
 #(length(header) == 0 || curHeaderStatus %in% c(-1, 100))
                                                            # do we want a \\\n at the end of the string to avoid
                                                            # matching lines with white space in the body.
@@ -77,6 +77,7 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
           
 	  if(verbose)
               cat("Setting option to read content-type", content.type[1], "character set", content.type["charset"], "\n")
+
 	  if(length(content.type) == 0 || (is.na(binary) || binary)) {
              len = 5000
              buf <<- binaryBuffer(len)
@@ -84,7 +85,6 @@ function(curl = getCurlHandle(), txt = character(), max = NA, value = NULL, verb
              curlSetOpt(writefunction = getNativeSymbolInfo("R_curl_write_binary_data")$address,
                         file = buf@ref, curl = curl, .isProtected = c(TRUE, FALSE))
           } else {
-#       browser()
              if(length(encoding) == 0 || is.na(encoding) || encoding == "")
                  encoding <<- content.type["charset"]
              

@@ -1163,7 +1163,7 @@ int
 R_curl_progress_callback (SEXP fun, double total, double now, double uploadTotal, double uploadNow)
 {
 	SEXP down, up, e, ans;
-	int errorOccurred, status;
+	int errorOccurred, status = 0;
 	static const char * const names[] = {"downloadTotal", "downloadNow",
 				"uplodateTotal", "uploadNow"};
 

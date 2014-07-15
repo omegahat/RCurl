@@ -18,6 +18,7 @@ License: BSD_3_clause + file LICENSE
 Depends: R (>= 2.7.0) 
 Imports: methods, bitops
 Suggests: Rcompression, XML
+Additional_repositories: http://www.omegahat.org
 URL: http://www.omegahat.org/RCurl
 Note:  This will be used generally to communicate with HTTP servers and specifically
        in the SOAP package, HTML forms and for accessing data on Web sites that require
