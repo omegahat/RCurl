@@ -11,6 +11,8 @@ static char RCurlErrorBuffer[1000] = "<error message in RCurl which has not been
 
 
 /* Callback routines that can be used to call R functions as handlers.  */
+size_t R_curl_write_binary_data(void *buffer, size_t size, size_t nmemb, void *userData);
+
 size_t R_curl_write_data(void *buffer, size_t size, size_t nmemb, RWriteDataInfo *);
 size_t R_curl_write_header_data(void *buffer, size_t size, size_t nmemb, RWriteDataInfo *data);
 
@@ -918,6 +920,19 @@ R_curl_BinaryData_new(SEXP r_size)
   R_RegisterCFinalizer(r_ans, R_curl_BinaryData_free);
   UNPROTECT(1);
   return(r_ans);
+}
+
+SEXP
+R_curl_BinaryData_insert(SEXP r_buf, SEXP r_data)
+{
+    RCurl_BinaryData *buf;
+    buf = (RCurl_BinaryData *) R_ExternalPtrAddr(r_buf);
+    if(!buf) {
+	PROBLEM "NULL buffer passed to R_curl_BinaryData_insert"
+	    ERROR;
+    }
+    R_curl_write_binary_data(RAW(r_data), 1, Rf_length(r_data), buf);
+    return(R_NilValue);
 }
 
 
