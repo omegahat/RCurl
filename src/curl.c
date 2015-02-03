@@ -229,6 +229,10 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 		    /* status = curl_easy_setopt(obj, CURLOPT_READFUNCTION, &R_curl_read_file_callback); */
 			status = curl_easy_setopt(obj, CURLOPT_READDATA, val);
 		} else {
+		    if(!val) {
+			PROBLEM "invalid value for curl option"
+			    ERROR;
+		    }
 		    switch(TYPEOF(el)) {
 		    case REALSXP:
 		    case INTSXP:
@@ -769,9 +773,15 @@ getCurlPointerForData(SEXP el, CURLoption option, Rboolean isProtected, CURL *cu
 	void *ptr = NULL;
 	int i, n;
 
+	int type = option/CURLOPTTYPE_OBJECTPOINT;
 
 	if(el == R_NilValue)
 	    return(ptr);
+
+	if(type == 1 && (TYPEOF(el) == LGLSXP)) {
+	    PROBLEM "trying to use a logical value for a curl option that requires a different type"
+		ERROR;
+	}
 
 	switch(TYPEOF(el)) {
 	    case STRSXP:
