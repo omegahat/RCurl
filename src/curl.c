@@ -229,10 +229,12 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 		    /* status = curl_easy_setopt(obj, CURLOPT_READFUNCTION, &R_curl_read_file_callback); */
 			status = curl_easy_setopt(obj, CURLOPT_READDATA, val);
 		} else {
+#if 0
 		    if(!val) {
-			PROBLEM "invalid value for curl option"
+			PROBLEM "invalid value for curl option %d", (int) opt
 			    ERROR;
 		    }
+#endif
 		    switch(TYPEOF(el)) {
 		    case REALSXP:
 		    case INTSXP:
@@ -431,10 +433,31 @@ buildForm(SEXP params, struct curl_httppost **post, struct curl_httppost **last)
 	n = GET_LENGTH(params);
 	names = GET_NAMES(params);
 
-	for(i =0; i < n ; i++) {
-		addFormElement(VECTOR_ELT(params, i), STRING_ELT(names, i), post, last, i);
-	} 
+	for(i = 0; i < n ; i++) 
+	    addFormElement(VECTOR_ELT(params, i), STRING_ELT(names, i), post, last, i);
 }
+
+
+SEXP
+R_buildForm(SEXP params, SEXP r_curl, SEXP r_set)
+{
+    CURL *curl = getCURLPointerRObject(r_curl);
+    struct curl_httppost *post = NULL, *last = NULL;
+    buildForm(params, &post, &last);
+    RCurl_addMemoryAllocation(CURLOPT_HTTPPOST, post, curl);
+
+    if(LOGICAL(r_set)[0])
+	curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
+
+    SEXP ans;
+    PROTECT(ans = NEW_LIST(2));
+    SET_VECTOR_ELT(ans, 0, R_MakeExternalPtr(post, Rf_install("curl_httppost"), R_NilValue));
+    SET_VECTOR_ELT(ans, 1, R_MakeExternalPtr(last, Rf_install("curl_httppost"), R_NilValue));
+    UNPROTECT(1);
+
+    return(ans);
+}
+
 
 void
 addFormElement(SEXP el, SEXP name, struct curl_httppost **post, struct curl_httppost **last, int which)
@@ -1560,7 +1583,7 @@ makeMultiCURLPointerRObject(CURLM *obj)
 	PROTECT(ans = NEW(klass));
 	PROTECT(ref = R_MakeExternalPtr((void *) obj, Rf_install("MultiCURLHandle"), R_NilValue));
 	
-Rprintf("registered finalizer for multi %p\n", obj);
+//Rprintf("registered finalizer for multi %p\n", obj);
 	R_RegisterCFinalizer(ref, R_finalizeMultiCurlHandle);
 	ans = SET_SLOT(ans, Rf_install("ref"), ref);
 	

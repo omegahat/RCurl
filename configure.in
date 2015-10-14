@@ -179,6 +179,7 @@ dnl make  a sample program that uses this invocation. If it seg faults, we need 
 CURL_LIBS=`${CURL_CONFIG} --libs`
 CURL_CFLAGS=`${CURL_CONFIG} --cflags`
 
+echo "CURL_LIBS:  $CURL_LIBS"
 
 AC_SUBST(DEFINES)
 

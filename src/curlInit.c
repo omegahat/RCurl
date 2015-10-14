@@ -23,6 +23,8 @@ static R_CallMethodDef CallEntries[] = {
 	RegCallFun(R_getCURLInfoEnum, 0),
 	RegCallFun(R_getCURLOptionEnum, 0),
 
+	RegCallFun(R_buildForm, 3),
+
 	{NULL, NULL, 0}
 };
 
