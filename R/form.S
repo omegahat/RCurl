@@ -194,3 +194,14 @@ function(filename = character(), contents = character(), contentType = character
                  contentType = as.character(contentType)),
             class = "FileUploadInfo")
 }  
+
+
+buildPostForm =
+    #
+    #
+    #
+function(args, curl, set = TRUE)
+{
+   args = as(args, "list")
+   .Call("R_buildForm", args, curl, as.logical(set))
+}

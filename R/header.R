@@ -29,7 +29,7 @@ function(lines, multi = TRUE)
      # Have to worry about whether we just get a 100 and nothing else
      # and so lines[3] won't exist.
    if((length(lines) - length(grep("^[[:space:]]*$", lines))) == 1)
-     return(st)
+     return(unlist(st))
      # We seem to jump to the 3 rd line as the real status
      # and discard the first two lines. Is this the Expect.
 #   status = lines[3]
