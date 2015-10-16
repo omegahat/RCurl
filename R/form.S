@@ -156,7 +156,7 @@ function(uri, ...,
 
   if(!is.null(write)) {
      http.header = parseHTTPHeader(write$header())
-     stop.if.HTTP.error(http.header)
+     stop.if.HTTP.error(http.header, write$value())
   }
   
   if(!is.null(buf)) {

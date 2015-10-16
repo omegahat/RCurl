@@ -42,7 +42,7 @@ function(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA, binary =
   
   if(isHTTP && length(header$header())) {
      http.header = parseHTTPHeader(header$header())
-     stop.if.HTTP.error(http.header)
+     stop.if.HTTP.error(http.header, header$value())
   }
 
   if(returnHeader)
@@ -56,7 +56,7 @@ function(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA, binary =
 }
 
 stop.if.HTTP.error = 
-function(http.header)
+function(http.header, body = NA)
 {
 
   if(length(http.header) == 0)
@@ -66,7 +66,9 @@ function(http.header)
      klass =  getHTTPErrorClass(http.header[["status"]])
      err = simpleError(http.header[["statusMessage"]])
      err$httpHeader = http.header
+     err$body =  body
      class(err) = c(klass, class(err))
+     
      #signalCondition(err)
      stop(err)
   }
@@ -84,7 +86,7 @@ function(ans, header, .encoding = NA)
   headerText = if(is.character(header)) header else header$value()
   http.header = parseHTTPHeader(headerText)
 
-  stop.if.HTTP.error(http.header)  
+  stop.if.HTTP.error(http.header, ans)  
 
   content.type = getContentType(http.header)
   binary = isBinaryContent(http.header, content.type)
