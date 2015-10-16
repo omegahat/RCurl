@@ -82,4 +82,7 @@ size_t R_Curl_base64_encode(const char *inp, size_t insize, char **outptr);
 
 SEXP R_curl_easy_reset(SEXP handle);
 
+
+SEXP R_buildForm(SEXP params, SEXP r_curl, SEXP r_set);
+
 #endif
