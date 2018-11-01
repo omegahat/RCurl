@@ -12,7 +12,7 @@ function(url, ..., .opts = list(...), curl = getCurlHandle(.opts = .opts),
   if(failed)
       return(FALSE)
                    
-  if(grepl("^ftp", url)) {
+  if(grepl("^ftp|^sftp", url)) {
     return(TRUE)
   } else
      header = parseHTTPHeader(g$value())
