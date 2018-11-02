@@ -129,7 +129,7 @@ function(txt = character(), max = NA)
 
 getURL = getURI = 
   #
-  # initializes a curl handle, populates its settingsc
+  # initializes a curl handle, populates its settings
   #
 function(url, ..., .opts = list(), write = basicTextGatherer(.mapUnicode = .mapUnicode), curl = getCurlHandle(),
           async = length(url) > 1, .encoding = integer(), .mapUnicode = TRUE)
