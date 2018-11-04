@@ -58,7 +58,7 @@ getURLContent(url, ..., curl = getCurlHandle(.opts = .opts), .encoding = NA,
   \item{curl}{the previously initialized CURL context/handle which can
     be used for multiple requests.}
   \item{async}{a logical value that determines whether the download
-    request should be done via asynchronous,concurrent downloading or a serial
+    request should be done via asynchronous, concurrent downloading or a serial
     download. This really only arises when we are trying to download
     multiple URIs in a single call. There are trade-offs between
     concurrent and serial downloads, essentially trading CPU cycles
