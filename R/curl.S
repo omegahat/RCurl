@@ -389,3 +389,14 @@ function(x, codes = PercentCodes)
   els[ i != 0 ] = codes[ i ]
   paste(els, collapse = "")
 }
+
+
+curlPercentDecode =
+function(x, codes = PercentCodes)
+{
+  for(i in seq(along = codes)) {
+     x = gsub(codes[i], names(codes)[i], x, fixed = TRUE)
+  }
+
+  x              
+}    
