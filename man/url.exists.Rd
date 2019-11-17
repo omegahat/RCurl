@@ -13,7 +13,7 @@ url.exists(url, ..., .opts = list(...),
              .header = FALSE)
 }
 \arguments{
-  \item{url}{the URL whose existence we are to test}
+  \item{url}{a vector of one or more URLs whose existence we are to test}
   \item{\dots}{name = value pairs of Curl options.}
   \item{.opts}{a list of name = value pairs of Curl options.}
   \item{curl}{a Curl handle that the caller can specify if she wants to
@@ -30,11 +30,12 @@ url.exists(url, ..., .opts = list(...),
 }
 \value{
   If \code{.header} is \code{FALSE}, this returns
-  \code{TRUE} or \code{FALSE} indicating whether
+  \code{TRUE} or \code{FALSE} for each URL indicating whether
   the request was successful (had a status with a value
   in the 200 range).
 
-  If \code{.header} is \code{TRUE}
+  If \code{.header} is \code{TRUE}, the header is returned for the
+  request for each URL.
 }
 \references{
   HTTP specification
