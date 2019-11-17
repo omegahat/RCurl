@@ -2,9 +2,11 @@ url.exists =
 function(url, ..., .opts = list(...), curl = getCurlHandle(.opts = .opts),
          .header = FALSE)
 {
-  if(length(url) > 1)
+  if(length(url) > 1) {
           # Really want to do this with a multi curl so asynchronous.
-     return(sapply(url, url.exists, curl = curl, .header = .header))
+      ap = if(.header) lapply else sapply
+      return(ap(url, url.exists, curl = curl, .header = .header))
+  }
     
   g = basicTextGatherer()
   failed = FALSE
