@@ -207,7 +207,7 @@ R_curl_easy_setopt(SEXP handle, SEXP values, SEXP opts, SEXP isProtected, SEXP e
 		} else  if(opt == CURLOPT_SSL_CTX_FUNCTION && TYPEOF(el) == EXTPTRSXP) {
 			status =  curl_easy_setopt(obj, opt, val);
 
-		} else  if(opt == CURLOPT_WRITEDATA && TYPEOF(el) == EXTPTRSXP) {
+		} else  if(opt == CURLOPT_WRITEDATA && (TYPEOF(el) == EXTPTRSXP || inherits(el, "connection"))) {
 			status =  curl_easy_setopt(obj, opt, val);
 
 		} else  if(opt == CURLOPT_POSTFIELDS && TYPEOF(el) == RAWSXP) {
@@ -806,6 +806,12 @@ getCurlPointerForData(SEXP el, CURLoption option, Rboolean isProtected, CURL *cu
 		ERROR;
 	}
 
+	// Do we want this or not? Added when adding write_binary_data_to_connection, but then
+	// leverage inherits() directly in R_curl_easy_setopt
+	if (inherits(el, "connection")) 
+	    return(el);
+
+	
 	switch(TYPEOF(el)) {
 	    case STRSXP:
 		    if(option == CURLOPT_HTTPHEADER ||
@@ -1008,6 +1014,28 @@ R_curl_write_binary_data(void *buffer, size_t size, size_t nmemb, void *userData
   return(total);
 }
 
+
+
+#include "R_ext/Connections.h"
+#if 0
+SEXP
+R_test_write_con(SEXP con)
+{
+    char buf[4] = "abc";
+    R_WriteConnection( R_GetConnection(con), buf, 3);
+    return(R_NilValue);
+}
+#endif
+
+
+size_t 
+R_curl_write_binary_data_to_connection(void *buffer, size_t size, size_t nmemb, void *userData)
+{
+//    Rprintf(" incoming address %p\n", userData);
+//    Rf_PrintValue((SEXP) userData);
+    R_WriteConnection( R_GetConnection( (SEXP) userData), buffer, size*nmemb);
+    return(size*nmemb);
+}
 
 size_t
 R_call_R_write_function(SEXP fun, void *buffer, size_t size, size_t nmemb, RWriteDataInfo *data, cetype_t encoding)
