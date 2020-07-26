@@ -35,7 +35,8 @@ url.exists(url, ..., .opts = list(...),
   in the 200 range).
 
   If \code{.header} is \code{TRUE}, the header is returned for the
-  request for each URL.
+  request for each URL, unless the host could not be resolved. In
+  the latter case, the header is not meaningful.
 }
 \references{
   HTTP specification
