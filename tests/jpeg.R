@@ -1,6 +1,6 @@
 library(RCurl)
 
-url = "http://www.omegahat.org/Rcartogram/demo.jpg"
+url = "http://www.omegahat.net/Rcartogram/demo.jpg"
 header = RCurl:::basicTextGatherer()
 ans = getBinaryURL(url, headerfunction = header$update)
 
