@@ -85,4 +85,16 @@ SEXP R_curl_easy_reset(SEXP handle);
 
 SEXP R_buildForm(SEXP params, SEXP r_curl, SEXP r_set);
 
+
+#ifndef PROBLEM
+
+#define R_PROBLEM_BUFSIZE	4096
+#define PROBLEM			{char R_problem_buf[R_PROBLEM_BUFSIZE];(snprintf)(R_problem_buf, R_PROBLEM_BUFSIZE,
+#define ERROR			),Rf_error(R_problem_buf);}
+#define WARNING(x)		),Rf_warning(R_problem_buf);}
+#define WARN			WARNING(NULL)
+
+#endif
+
+
 #endif
