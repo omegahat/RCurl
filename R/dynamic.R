@@ -186,7 +186,7 @@ mapUnicodeEscapes =
 function(str, len = nchar(str) * 4L)
 {
    str = as.character(str)
-   len = rep(as.integer(len), length = length(str))
+   len = rep(as.integer(len), length.out = length(str))
    
    if(any(grepl("\\\\u[0-9A-Fa-f]", str)))
      .Call("R_mapString", str, len, PACKAGE = "RCurl")
